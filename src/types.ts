@@ -1,0 +1,56 @@
+export interface Pharmacy {
+  id: string;
+  name: string;
+  neighborhood: string;
+  lat: number;
+  lng: number;
+  status: 'certified' | 'pending';
+  phone: string;
+  address: string;
+  rating: number;
+}
+
+export interface Medication {
+  id: string;
+  name: string;
+  molecule: string;
+  standardPrice: number;
+  category: string;
+  description: string;
+  imageUrl?: string;
+}
+
+export interface Stock {
+  id: string;
+  pharmacyId: string;
+  medicationId: string;
+  quantity: number;
+  price: number;
+}
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  phone: string;
+  email: string;
+  role: 'user' | 'admin' | 'pharmacist';
+}
+
+export interface Order {
+  id: string;
+  userId: string;
+  pharmacyId: string;
+  pharmacyName: string;
+  pharmacyPhone: string;
+  items: {
+    medicationId: string;
+    name: string;
+    quantity: number;
+    price: number;
+    imageUrl?: string;
+  }[];
+  total: number;
+  status: 'pending' | 'paid' | 'delivered' | 'cancelled';
+  deliveryType: 'pickup' | 'delivery';
+  createdAt: any;
+}

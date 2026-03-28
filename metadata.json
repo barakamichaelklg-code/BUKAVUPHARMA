@@ -1,0 +1,5 @@
+{
+  "name": "PharmaBukavu",
+  "description": "Une application pour connecter les habitants de Bukavu aux pharmacies certifiées, permettant la recherche de médicaments, la comparaison de prix et l'achat via Mobile Money.",
+  "requestFramePermissions": ["geolocation"]
+}

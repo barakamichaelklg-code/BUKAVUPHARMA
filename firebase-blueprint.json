@@ -1,0 +1,79 @@
+{
+  "entities": {
+    "pharmacies": {
+      "title": "Pharmacies",
+      "description": "Pharmacies certifiées à Bukavu",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Nom de la pharmacie" },
+        "neighborhood": { "type": "string", "description": "Quartier (Ibanda, Kadutu, Bagira)" },
+        "lat": { "type": "number", "description": "Latitude" },
+        "lng": { "type": "number", "description": "Longitude" },
+        "status": { "type": "string", "enum": ["certified", "pending"], "description": "Statut de certification" },
+        "phone": { "type": "string", "description": "Numéro de téléphone" },
+        "address": { "type": "string", "description": "Adresse physique" },
+        "rating": { "type": "number", "description": "Note moyenne des utilisateurs" }
+      },
+      "required": ["name", "neighborhood", "lat", "lng", "status", "phone"]
+    },
+    "medications": {
+      "title": "Médicaments",
+      "description": "Liste des médicaments disponibles",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Nom commercial" },
+        "molecule": { "type": "string", "description": "Molécule active" },
+        "standardPrice": { "type": "number", "description": "Prix officiel indicatif" },
+        "category": { "type": "string", "description": "Catégorie (ex: Antibiotique, Antipaludique)" },
+        "description": { "type": "string", "description": "Description et posologie" }
+      },
+      "required": ["name", "molecule", "standardPrice", "category"]
+    },
+    "stocks": {
+      "title": "Stocks",
+      "description": "Disponibilité des médicaments par pharmacie",
+      "type": "object",
+      "properties": {
+        "pharmacyId": { "type": "string", "description": "ID de la pharmacie" },
+        "medicationId": { "type": "string", "description": "ID du médicament" },
+        "quantity": { "type": "number", "description": "Quantité en stock" },
+        "price": { "type": "number", "description": "Prix de vente actuel" }
+      },
+      "required": ["pharmacyId", "medicationId", "quantity", "price"]
+    },
+    "users": {
+      "title": "Utilisateurs",
+      "description": "Profils utilisateurs",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Nom complet" },
+        "phone": { "type": "string", "description": "Numéro de téléphone pour Mobile Money" },
+        "email": { "type": "string", "description": "Email" },
+        "role": { "type": "string", "enum": ["user", "admin", "pharmacist"], "description": "Rôle de l'utilisateur" }
+      },
+      "required": ["name", "phone", "email", "role"]
+    },
+    "orders": {
+      "title": "Commandes",
+      "description": "Historique des achats",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "ID de l'utilisateur" },
+        "pharmacyId": { "type": "string", "description": "ID de la pharmacie" },
+        "items": { "type": "array", "description": "Liste des médicaments commandés" },
+        "total": { "type": "number", "description": "Montant total" },
+        "status": { "type": "string", "enum": ["pending", "paid", "delivered", "cancelled"], "description": "Statut de la commande" },
+        "deliveryType": { "type": "string", "enum": ["pickup", "delivery"], "description": "Mode de réception" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Date de création" }
+      },
+      "required": ["userId", "pharmacyId", "items", "total", "status", "deliveryType", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/pharmacies": { "schema": "pharmacies", "description": "Collection des pharmacies" },
+    "/medications": { "schema": "medications", "description": "Collection des médicaments" },
+    "/stocks": { "schema": "stocks", "description": "Collection des stocks" },
+    "/users": { "schema": "users", "description": "Collection des utilisateurs" },
+    "/orders": { "schema": "orders", "description": "Collection des commandes" }
+  }
+}
