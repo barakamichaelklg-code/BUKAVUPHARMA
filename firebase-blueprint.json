@@ -67,6 +67,48 @@
         "createdAt": { "type": "string", "format": "date-time", "description": "Date de création" }
       },
       "required": ["userId", "pharmacyId", "items", "total", "status", "deliveryType", "createdAt"]
+    },
+    "reviews": {
+      "title": "Avis",
+      "description": "Avis sur les pharmacies",
+      "type": "object",
+      "properties": {
+        "pharmacyId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["pharmacyId", "userId", "rating", "comment"]
+    },
+    "chatThreads": {
+      "title": "Discussions",
+      "description": "Fils de discussion entre utilisateurs et pharmacies",
+      "type": "object",
+      "properties": {
+        "pharmacyId": { "type": "string" },
+        "pharmacyName": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "lastMessage": { "type": "string" },
+        "lastMessageTime": { "type": "string", "format": "date-time" },
+        "unreadCount": { "type": "number" }
+      },
+      "required": ["pharmacyId", "userId"]
+    },
+    "chatMessages": {
+      "title": "Messages",
+      "description": "Messages d'un fil de discussion",
+      "type": "object",
+      "properties": {
+        "threadId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "text": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["threadId", "senderId", "text"]
     }
   },
   "firestore": {
@@ -74,6 +116,9 @@
     "/medications": { "schema": "medications", "description": "Collection des médicaments" },
     "/stocks": { "schema": "stocks", "description": "Collection des stocks" },
     "/users": { "schema": "users", "description": "Collection des utilisateurs" },
-    "/orders": { "schema": "orders", "description": "Collection des commandes" }
+    "/orders": { "schema": "orders", "description": "Collection des commandes" },
+    "/reviews": { "schema": "reviews", "description": "Avis des utilisateurs" },
+    "/chatThreads": { "schema": "chatThreads", "description": "Fils de discussion" },
+    "/chatMessages": { "schema": "chatMessages", "description": "Messages des fils de discussion" }
   }
 }

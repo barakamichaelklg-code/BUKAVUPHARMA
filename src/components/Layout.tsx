@@ -84,6 +84,7 @@ export default function Layout() {
         <div className="max-w-7xl mx-auto flex justify-around items-center h-20 px-4">
           <NavButton to="/" icon={<Home className="w-6 h-6" />} label="Accueil" />
           <NavButton to="/map" icon={<MapIcon className="w-6 h-6" />} label="Carte" />
+          <NavButton to="/messages" icon={<MessageCircle className="w-6 h-6" />} label="Messages" />
           <NavButton to="/cart" icon={<ShoppingCart className="w-6 h-6" />} label="Panier" />
           <NavButton to="/profile" icon={<User className="w-6 h-6" />} label="Profil" />
         </div>

@@ -2,41 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Search, MapPin, ShieldCheck, ChevronRight, Pill } from 'lucide-react';
 import { collection, onSnapshot, query, where, deleteDoc, doc, addDoc, FirestoreError } from 'firebase/firestore';
-import { db, auth } from '../firebase';
+import { db, auth, handleFirestoreError, OperationType } from '../firebase';
 import { Pharmacy, Medication } from '../types';
 import { Link } from 'react-router-dom';
 import SeedData from './SeedData';
 import { cn } from '../lib/utils';
 import { Trash2, Plus, X } from 'lucide-react';
 import { AnimatePresence } from 'motion/react';
-
-enum OperationType {
-  CREATE = 'create',
-  UPDATE = 'update',
-  DELETE = 'delete',
-  LIST = 'list',
-  GET = 'get',
-  WRITE = 'write',
-}
-
-interface FirestoreErrorInfo {
-  error: string;
-  operationType: OperationType;
-  path: string | null;
-  authInfo: {
-    userId: string | undefined;
-    email: string | null | undefined;
-    emailVerified: boolean | undefined;
-    isAnonymous: boolean | undefined;
-    tenantId: string | null | undefined;
-    providerInfo: {
-      providerId: string;
-      displayName: string | null;
-      email: string | null;
-      photoUrl: string | null;
-    }[];
-  }
-}
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -53,29 +25,6 @@ export default function Dashboard() {
     description: '',
     imageUrl: ''
   });
-
-  const handleFirestoreError = (error: unknown, operationType: OperationType, path: string | null) => {
-    const errInfo: FirestoreErrorInfo = {
-      error: error instanceof Error ? error.message : String(error),
-      authInfo: {
-        userId: auth.currentUser?.uid,
-        email: auth.currentUser?.email,
-        emailVerified: auth.currentUser?.emailVerified,
-        isAnonymous: auth.currentUser?.isAnonymous,
-        tenantId: auth.currentUser?.tenantId,
-        providerInfo: auth.currentUser?.providerData.map(provider => ({
-          providerId: provider.providerId,
-          displayName: provider.displayName,
-          email: provider.email,
-          photoUrl: provider.photoURL
-        })) || []
-      },
-      operationType,
-      path
-    };
-    console.error('Firestore Error: ', JSON.stringify(errInfo));
-    throw new Error(JSON.stringify(errInfo));
-  };
 
   useEffect(() => {
     setIsAdmin(auth.currentUser?.email === 'barakamichaelklg@gmail.com');
@@ -244,10 +193,23 @@ export default function Dashboard() {
                   <div className="w-12 h-12 bg-emerald-50 dark:bg-emerald-500/10 rounded-[1.25rem] flex items-center justify-center">
                     <MapPin className="w-6 h-6 text-emerald-600 dark:text-emerald-500" />
                   </div>
-                  <span className="text-[10px] bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                    Ouvert
-                  </span>
+                  {(() => {
+                    const hour = new Date().getHours();
+                    // Basic logic: open 8h-21h. We add a pseudo-random check based on ID length to simulate some closed pharmacies for demo purposes.
+                    const isAlwaysOpen = pharmacy.name.includes('24');
+                    const isOpen = isAlwaysOpen || ((hour >= 8 && hour < 21) && pharmacy.id.length % 3 !== 0);
+                    return isOpen ? (
+                      <span className="text-[10px] bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider flex items-center gap-1 border border-emerald-200/50 dark:border-emerald-500/20">
+                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                        Ouvert
+                      </span>
+                    ) : (
+                      <span className="text-[10px] bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider flex items-center gap-1 border border-red-200/50 dark:border-red-500/20">
+                        <span className="w-1.5 h-1.5 bg-red-500 rounded-full" />
+                        Fermé
+                      </span>
+                    );
+                  })()}
                 </div>
                 
                 <div className="space-y-1">

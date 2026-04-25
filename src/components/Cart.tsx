@@ -1,40 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ShoppingCart, Trash2, Plus, Minus, CreditCard, ShieldCheck, Pill, CheckCircle2, Copy, ExternalLink, Phone } from 'lucide-react';
-import { auth, db } from '../firebase';
+import { auth, db, handleFirestoreError, OperationType } from '../firebase';
 import { Order } from '../types';
 import { collection, query, where, onSnapshot, deleteDoc, doc, updateDoc, FirestoreError } from 'firebase/firestore';
 import { cn } from '../lib/utils';
 import { Link } from 'react-router-dom';
 import { paymentService } from '../services/paymentService';
-
-enum OperationType {
-  CREATE = 'create',
-  UPDATE = 'update',
-  DELETE = 'delete',
-  LIST = 'list',
-  GET = 'get',
-  WRITE = 'write',
-}
-
-interface FirestoreErrorInfo {
-  error: string;
-  operationType: OperationType;
-  path: string | null;
-  authInfo: {
-    userId: string | undefined;
-    email: string | null | undefined;
-    emailVerified: boolean | undefined;
-    isAnonymous: boolean | undefined;
-    tenantId: string | null | undefined;
-    providerInfo: {
-      providerId: string;
-      displayName: string | null;
-      email: string | null;
-      photoUrl: string | null;
-    }[];
-  }
-}
 
 export default function Cart() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -46,29 +18,6 @@ export default function Cart() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [paymentPhone, setPaymentPhone] = useState('');
   const [paymentError, setPaymentError] = useState<string | null>(null);
-
-  const handleFirestoreError = (error: unknown, operationType: OperationType, path: string | null) => {
-    const errInfo: FirestoreErrorInfo = {
-      error: error instanceof Error ? error.message : String(error),
-      authInfo: {
-        userId: auth.currentUser?.uid,
-        email: auth.currentUser?.email,
-        emailVerified: auth.currentUser?.emailVerified,
-        isAnonymous: auth.currentUser?.isAnonymous,
-        tenantId: auth.currentUser?.tenantId,
-        providerInfo: auth.currentUser?.providerData.map(provider => ({
-          providerId: provider.providerId,
-          displayName: provider.displayName,
-          email: provider.email,
-          photoUrl: provider.photoURL
-        })) || []
-      },
-      operationType,
-      path
-    };
-    console.error('Firestore Error: ', JSON.stringify(errInfo));
-    throw new Error(JSON.stringify(errInfo));
-  };
 
   const handleDial = (network: 'mpesa' | 'airtel' | 'orange', order: Order) => {
     setSelectedNetwork(network);

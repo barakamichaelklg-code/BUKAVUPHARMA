@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { collection, addDoc, getDocs, query, where, updateDoc, doc } from 'firebase/firestore';
-import { db, auth } from '../firebase';
+import { db, auth, handleFirestoreError, OperationType } from '../firebase';
 import { Database, CheckCircle2, AlertCircle, LogIn } from 'lucide-react';
 
 export default function SeedData() {
@@ -36,9 +36,14 @@ export default function SeedData() {
       ];
 
       for (const p of pharmacies) {
-        const q = query(collection(db, 'pharmacies'), where('name', '==', p.name));
-        const existing = await getDocs(q);
-        if (existing.empty) await addDoc(collection(db, 'pharmacies'), p);
+        const path = 'pharmacies';
+        try {
+          const q = query(collection(db, path), where('name', '==', p.name));
+          const existing = await getDocs(q);
+          if (existing.empty) await addDoc(collection(db, path), p);
+        } catch (err) {
+          handleFirestoreError(err, OperationType.WRITE, path);
+        }
       }
 
       // 2. Seed Medications
@@ -142,25 +147,30 @@ export default function SeedData() {
       ];
 
       for (const m of medications) {
-        const q = query(collection(db, 'medications'), where('name', '==', m.name));
-        const existing = await getDocs(q);
-        if (existing.empty) {
-          const docRef = await addDoc(collection(db, 'medications'), m);
-          
-          // Seed some stocks for each medication
-          const pharms = await getDocs(collection(db, 'pharmacies'));
-          for (const p of pharms.docs) {
-            await addDoc(collection(db, 'stocks'), {
-              pharmacyId: p.id,
-              medicationId: docRef.id,
-              quantity: Math.floor(Math.random() * 50) + 10,
-              price: m.standardPrice + (Math.floor(Math.random() * 2000) - 1000)
-            });
+        const path = 'medications';
+        try {
+          const q = query(collection(db, path), where('name', '==', m.name));
+          const existing = await getDocs(q);
+          if (existing.empty) {
+            const docRef = await addDoc(collection(db, path), m);
+            
+            // Seed some stocks for each medication
+            const pharms = await getDocs(collection(db, 'pharmacies'));
+            for (const p of pharms.docs) {
+              await addDoc(collection(db, 'stocks'), {
+                pharmacyId: p.id,
+                medicationId: docRef.id,
+                quantity: Math.floor(Math.random() * 50) + 10,
+                price: m.standardPrice + (Math.floor(Math.random() * 2000) - 1000)
+              });
+            }
+          } else {
+            // Force update image to ensure we have the latest ones
+            const docRef = doc(db, 'medications', existing.docs[0].id);
+            await updateDoc(docRef, { imageUrl: m.imageUrl });
           }
-        } else {
-          // Force update image to ensure we have the latest ones
-          const docRef = doc(db, 'medications', existing.docs[0].id);
-          await updateDoc(docRef, { imageUrl: m.imageUrl });
+        } catch (err) {
+          handleFirestoreError(err, OperationType.WRITE, path);
         }
       }
 

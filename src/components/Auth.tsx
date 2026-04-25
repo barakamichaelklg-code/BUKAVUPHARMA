@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { LogIn, UserPlus, Phone, Lock, ShieldCheck } from 'lucide-react';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { auth, db } from '../firebase';
+import { auth, db, handleFirestoreError, OperationType } from '../firebase';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 export default function Auth() {
@@ -15,16 +15,21 @@ export default function Auth() {
       const user = result.user;
       
       // Create user document if it doesn't exist
-      const userRef = doc(db, 'users', user.uid);
-      const userSnap = await getDoc(userRef);
-      
-      if (!userSnap.exists()) {
-        await setDoc(userRef, {
-          name: user.displayName || 'Utilisateur',
-          email: user.email,
-          phone: user.phoneNumber || '',
-          role: 'user' // Default role
-        });
+      const userPath = `users/${user.uid}`;
+      try {
+        const userRef = doc(db, 'users', user.uid);
+        const userSnap = await getDoc(userRef);
+        
+        if (!userSnap.exists()) {
+          await setDoc(userRef, {
+            name: user.displayName || 'Utilisateur',
+            email: user.email,
+            phone: user.phoneNumber || '',
+            role: 'user' // Default role
+          });
+        }
+      } catch (error) {
+        handleFirestoreError(error, OperationType.WRITE, userPath);
       }
     } catch (error) {
       console.error("Login error:", error);

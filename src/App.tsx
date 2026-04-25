@@ -12,6 +12,8 @@ const Auth = lazy(() => import('./components/Auth'));
 const ProductDetails = lazy(() => import('./components/ProductDetails'));
 const PharmacyDetails = lazy(() => import('./components/PharmacyDetails'));
 const Profile = lazy(() => import('./components/Profile'));
+const MessagesList = lazy(() => import('./components/MessagesList'));
+const Chat = lazy(() => import('./components/Chat'));
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -44,6 +46,14 @@ export default function App() {
                 <Route path="map" element={<MapView />} />
                 <Route path="product/:id" element={<ProductDetails />} />
                 <Route path="pharmacy/:id" element={<PharmacyDetails />} />
+                <Route 
+                  path="messages" 
+                  element={user ? <MessagesList /> : <Navigate to="/auth" />} 
+                />
+                <Route 
+                  path="chat/:threadId" 
+                  element={user ? <Chat /> : <Navigate to="/auth" />} 
+                />
                 <Route 
                   path="cart" 
                   element={user ? <Cart /> : <Navigate to="/auth" />} 

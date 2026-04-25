@@ -64,3 +64,23 @@ export interface Review {
   comment: string;
   createdAt: any;
 }
+
+export interface ChatThread {
+  id: string;
+  pharmacyId: string;
+  pharmacyName: string;
+  userId: string;
+  userName: string;
+  lastMessage: string;
+  lastMessageTime: any;
+  unreadCount?: number;
+}
+
+export interface ChatMessage {
+  id: string;
+  threadId: string;
+  senderId: string;
+  senderName: string;
+  text: string;
+  createdAt: any;
+}

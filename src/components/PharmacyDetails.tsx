@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { auth, db } from '../firebase';
-import { doc, getDoc, collection, query, where, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
+import { auth, db, handleFirestoreError, OperationType } from '../firebase';
+import { doc, getDoc, collection, query, where, onSnapshot, addDoc, serverTimestamp, getDocs } from 'firebase/firestore';
 import { Pharmacy, Review } from '../types';
-import { ArrowLeft, Star, ShieldCheck, MapPin, MessageSquare, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Star, ShieldCheck, MapPin, MessageSquare, AlertCircle, Phone } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export default function PharmacyDetails() {
@@ -19,8 +19,47 @@ export default function PharmacyDetails() {
   const [comment, setComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loadingChat, setLoadingChat] = useState(false);
 
   const [user, setUser] = useState(auth.currentUser);
+
+  const handleStartChat = async () => {
+    if (!user) {
+      navigate('/auth');
+      return;
+    }
+    if (!pharmacy) return;
+
+    setLoadingChat(true);
+    try {
+      const path = 'chatThreads';
+      const q = query(
+        collection(db, path),
+        where('userId', '==', user.uid),
+        where('pharmacyId', '==', pharmacy.id)
+      );
+      const querySnapshot = await getDocs(q);
+      
+      if (!querySnapshot.empty) {
+        // Thread exists
+        navigate(`/chat/${querySnapshot.docs[0].id}`);
+      } else {
+        // Create new thread
+        const newThreadRef = await addDoc(collection(db, path), {
+          pharmacyId: pharmacy.id,
+          pharmacyName: pharmacy.name,
+          userId: user.uid,
+          userName: user.displayName || user.email?.split('@')[0] || "Utilisateur",
+          lastMessage: "",
+          lastMessageTime: null
+        });
+        navigate(`/chat/${newThreadRef.id}`);
+      }
+    } catch (err) {
+      handleFirestoreError(err, OperationType.WRITE, 'chatThreads');
+    }
+    setLoadingChat(false);
+  };
 
   useEffect(() => {
     const unsubscribeAuth = auth.onAuthStateChanged((u) => {
@@ -30,6 +69,7 @@ export default function PharmacyDetails() {
     if (!id) return;
     
     const fetchPharmacy = async () => {
+      const path = `pharmacies/${id}`;
       try {
         const docRef = doc(db, 'pharmacies', id);
         const docSnap = await getDoc(docRef);
@@ -37,7 +77,7 @@ export default function PharmacyDetails() {
           setPharmacy({ id: docSnap.id, ...docSnap.data() } as Pharmacy);
         }
       } catch (err) {
-        console.error("Error fetching pharmacy:", err);
+        handleFirestoreError(err, OperationType.GET, path);
       } finally {
         setLoading(false);
       }
@@ -45,7 +85,8 @@ export default function PharmacyDetails() {
 
     fetchPharmacy();
 
-    const q = query(collection(db, 'reviews'), where('pharmacyId', '==', id));
+    const reviewPath = 'reviews';
+    const q = query(collection(db, reviewPath), where('pharmacyId', '==', id));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const reviewData = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Review));
       // Sort by newest first
@@ -54,6 +95,8 @@ export default function PharmacyDetails() {
         return b.createdAt.toMillis() - a.createdAt.toMillis();
       });
       setReviews(reviewData);
+    }, (error) => {
+      handleFirestoreError(error, OperationType.LIST, reviewPath);
     });
 
     return () => {
@@ -90,8 +133,9 @@ export default function PharmacyDetails() {
     }
 
     setSubmitting(true);
+    const path = 'reviews';
     try {
-      await addDoc(collection(db, 'reviews'), {
+      await addDoc(collection(db, path), {
         pharmacyId: id,
         userId: user.uid,
         userName: user.displayName || user.email?.split('@')[0] || "Utilisateur Anonyme",
@@ -103,8 +147,7 @@ export default function PharmacyDetails() {
       setRating(0);
       setComment('');
     } catch (err) {
-      console.error("Error adding review:", err);
-      setError("Une erreur est survenue lors de l'envoi de l'avis.");
+      handleFirestoreError(err, OperationType.CREATE, path);
     } finally {
       setSubmitting(false);
     }
@@ -148,16 +191,34 @@ export default function PharmacyDetails() {
         <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-[2rem] border border-slate-200/60 dark:border-white/10 shadow-sm space-y-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-2">
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 <h1 className="text-3xl font-bold text-slate-900 dark:text-white font-display tracking-tight leading-tight">
                   {pharmacy.name}
                 </h1>
-                {pharmacy.status === 'certified' && (
-                  <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-900/30 rounded-[1rem] border border-emerald-100/50 dark:border-emerald-500/20">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-300 uppercase tracking-widest text-[10px]">Certifiée</span>
-                  </div>
-                )}
+                <div className="flex items-center gap-2">
+                  {pharmacy.status === 'certified' && (
+                    <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-900/30 rounded-[1rem] border border-emerald-100/50 dark:border-emerald-500/20">
+                      <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                      <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-300 uppercase tracking-widest text-[10px]">Certifiée</span>
+                    </div>
+                  )}
+                  {(() => {
+                    const hour = new Date().getHours();
+                    const isAlwaysOpen = pharmacy.name.includes('24');
+                    const isOpen = isAlwaysOpen || ((hour >= 8 && hour < 21) && pharmacy.id.length % 3 !== 0);
+                    return isOpen ? (
+                      <span className="text-[10px] bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider flex items-center gap-1 border border-emerald-200/50 dark:border-emerald-500/20">
+                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                        Ouvert
+                      </span>
+                    ) : (
+                      <span className="text-[10px] bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider flex items-center gap-1 border border-red-200/50 dark:border-red-500/20">
+                        <span className="w-1.5 h-1.5 bg-red-500 rounded-full" />
+                        Fermé
+                      </span>
+                    );
+                  })()}
+                </div>
               </div>
               <div className="flex items-center gap-2 text-slate-500 font-medium">
                 <MapPin className="w-4 h-4 text-slate-400" />
@@ -165,13 +226,31 @@ export default function PharmacyDetails() {
               </div>
             </div>
             
-            <div className="flex items-center gap-4 bg-slate-50 dark:bg-[#1A1A1A] px-5 py-3 rounded-[1.5rem] border border-slate-200/60 dark:border-white/5 self-start">
-              <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center">
-                <Star className="w-5 h-5 text-emerald-600 dark:text-emerald-400 fill-emerald-500" />
-              </div>
-              <div>
-                <p className="text-2xl font-black text-slate-900 dark:text-white font-display leading-none">{averageRating}</p>
-                <p className="text-xs text-slate-500 font-semibold">{reviews.length} avis</p>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 self-start">
+              {pharmacy.status === 'certified' && (
+                <button
+                  onClick={handleStartChat}
+                  disabled={loadingChat}
+                  className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded-[1.5rem] font-semibold transition-all active:scale-95 shadow-sm w-full sm:w-auto justify-center"
+                >
+                  {loadingChat ? (
+                    <div className="w-5 h-5 border-2 border-white/50 border-t-white rounded-full animate-spin"></div>
+                  ) : (
+                    <>
+                      <MessageSquare className="w-5 h-5" />
+                      Discuter
+                    </>
+                  )}
+                </button>
+              )}
+              <div className="flex items-center gap-4 bg-slate-50 dark:bg-[#1A1A1A] px-5 py-3 rounded-[1.5rem] border border-slate-200/60 dark:border-white/5 w-full sm:w-auto">
+                <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Star className="w-5 h-5 text-emerald-600 dark:text-emerald-400 fill-emerald-500" />
+                </div>
+                <div>
+                  <p className="text-2xl font-black text-slate-900 dark:text-white font-display leading-none">{averageRating}</p>
+                  <p className="text-xs text-slate-500 font-semibold">{reviews.length} avis</p>
+                </div>
               </div>
             </div>
           </div>
