@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { ShoppingBag, ArrowLeft, ShieldCheck, Info, CreditCard, Truck, CheckCircle2 } from 'lucide-react';
+import { ShoppingBag, ArrowLeft, ShieldCheck, Info, CreditCard, Truck, CheckCircle2, ShoppingCart } from 'lucide-react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc, collection, query, where, onSnapshot, addDoc, deleteDoc, FirestoreError } from 'firebase/firestore';
 import { db, auth } from '../firebase';
@@ -253,7 +253,9 @@ export default function ProductDetails() {
                 <div key={s.id} className="p-5 rounded-[1.5rem] border border-slate-200/60 dark:border-white/10 bg-white dark:bg-slate-900 shadow-sm text-slate-900 dark:text-white flex items-center justify-between hover:shadow-md transition-all">
                   <div className="space-y-1.5 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-slate-900 dark:text-white text-base truncate tracking-tight">{s.pharmacy.name}</span>
+                      <Link to={`/pharmacy/${s.pharmacyId}`} className="font-semibold text-slate-900 dark:text-white text-base truncate tracking-tight hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                        {s.pharmacy.name}
+                      </Link>
                       {s.pharmacy.status === 'certified' && <ShieldCheck className="w-4 h-4 text-emerald-600 fill-emerald-50 dark:fill-emerald-500/10 flex-shrink-0" />}
                     </div>
                     <div className="flex flex-col gap-0.5">
@@ -266,9 +268,15 @@ export default function ProductDetails() {
                     <button 
                       onClick={() => handlePurchase(s)}
                       disabled={buying || success}
-                      className="text-[10px] bg-slate-900 dark:bg-emerald-600 text-white px-4 py-2 rounded-[1rem] font-semibold uppercase tracking-widest disabled:opacity-50 shadow-sm active:scale-95 transition-all"
+                      className="text-[10px] bg-slate-900 dark:bg-emerald-600 text-white px-4 py-2 rounded-[1rem] font-semibold uppercase tracking-widest disabled:opacity-50 shadow-sm active:scale-95 transition-all flex items-center gap-1.5"
                     >
-                      {success ? "Prêt !" : buying ? "..." : "Acheter"}
+                      {success ? (
+                        <><CheckCircle2 className="w-3.5 h-3.5" /> Ajouté</>
+                      ) : buying ? (
+                        "..."
+                      ) : (
+                        <><ShoppingCart className="w-3.5 h-3.5" /> Ajouter au panier</>
+                      )}
                     </button>
                   </div>
                 </div>
@@ -290,11 +298,11 @@ export default function ProductDetails() {
           className="flex-[3] py-4 bg-emerald-600 dark:bg-emerald-500 text-white dark:text-slate-900 rounded-[1.5rem] font-medium flex items-center justify-center gap-3 shadow-sm hover:bg-emerald-700 transition-all active:scale-95 disabled:opacity-50"
         >
           {success ? (
-            <><CheckCircle2 className="w-5 h-5" /> Commande Passée</>
+            <><CheckCircle2 className="w-5 h-5" /> Ajouté au panier</>
           ) : buying ? (
             <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
           ) : (
-            <><CreditCard className="w-5 h-5" /> Mobile Money (Rapide)</>
+            <><ShoppingCart className="w-5 h-5" /> Ajouter au panier</>
           )}
         </button>
         <button className="flex-1 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-[1.5rem] flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-95 border border-slate-200/60 dark:border-white/10 shadow-sm">

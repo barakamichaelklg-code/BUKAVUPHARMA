@@ -4,6 +4,7 @@ import { MapPin, ShieldCheck, Phone, Navigation, Info, Search, Pill } from 'luci
 import { collection, onSnapshot, query, where, getDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { Pharmacy, Medication, Stock } from '../types';
+import { Link } from 'react-router-dom';
 
 export default function MapView() {
   const [pharmacies, setPharmacies] = useState<Pharmacy[]>([]);
@@ -172,14 +173,21 @@ export default function MapView() {
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${selectedPharmacy.lat},${selectedPharmacy.lng}`, '_blank')}
-                className="flex items-center justify-center gap-3 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[1.5rem] font-medium text-sm shadow-sm hover:shadow-md transition-all"
+                className="flex items-center justify-center gap-3 py-3 bg-white dark:bg-slate-800 border border-slate-200/60 dark:border-white/10 text-slate-700 dark:text-slate-200 rounded-[1.5rem] font-medium text-sm shadow-sm hover:shadow-md transition-all"
               >
-                <div className="w-8 h-8 bg-white/20 dark:bg-black/10 rounded-[1rem] flex items-center justify-center">
-                  <Navigation className="w-4 h-4 text-white dark:text-slate-900" />
+                <div className="w-8 h-8 bg-slate-50 dark:bg-slate-900 rounded-[1rem] flex items-center justify-center border border-slate-100 dark:border-white/5">
+                  <Navigation className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <span className="font-display">Itinéraire</span>
               </motion.button>
             </div>
+
+            <Link 
+              to={`/pharmacy/${selectedPharmacy.id}`}
+              className="mt-4 flex items-center justify-center gap-3 py-3 w-full bg-slate-900 dark:bg-emerald-600 text-white rounded-[1.5rem] font-medium text-sm shadow-sm hover:shadow-md transition-all"
+            >
+              <span className="font-display">Voir la pharmacie et les avis</span>
+            </Link>
 
             {/* Search Medications */}
             <div className="pt-4 border-t border-slate-200/60 dark:border-white/10 space-y-4">

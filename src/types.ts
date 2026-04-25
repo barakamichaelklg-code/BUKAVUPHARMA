@@ -54,3 +54,13 @@ export interface Order {
   deliveryType: 'pickup' | 'delivery';
   createdAt: any;
 }
+
+export interface Review {
+  id: string;
+  pharmacyId: string;
+  userId: string;
+  userName: string;
+  rating: number;
+  comment: string;
+  createdAt: any;
+}
