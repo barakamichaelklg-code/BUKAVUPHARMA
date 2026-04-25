@@ -16,12 +16,12 @@ export default function Layout() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col font-sans transition-colors duration-500 bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen flex flex-col font-sans transition-colors duration-500 bg-transparent">
       {/* Header */}
-      <header className="bg-white/90 dark:bg-slate-950/90 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200/50 dark:border-slate-800/50 shadow-sm transition-colors duration-500">
+      <header className="bg-white/80 dark:bg-[#1A1A1A]/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200/60 dark:border-white/5 transition-colors duration-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-200 dark:shadow-emerald-900/20">
+            <div className="w-9 h-9 bg-emerald-600 rounded-[0.8rem] flex items-center justify-center shadow-md">
               <Pill className="text-white w-5 h-5" />
             </div>
             <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight font-display transition-colors duration-500">PharmaBukavu</h1>
@@ -29,14 +29,14 @@ export default function Layout() {
           <div className="flex items-center gap-1">
             <button 
               onClick={toggleDarkMode}
-              className="p-2.5 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl transition-all active:scale-95"
+              className="p-2.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5 rounded-[0.8rem] transition-all active:scale-95"
               aria-label="Basculer le thème"
             >
               {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
             <button 
               onClick={handleSearchClick}
-              className="p-2.5 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl transition-all active:scale-95"
+              className="p-2.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5 rounded-[0.8rem] transition-all active:scale-95"
             >
               <Search className="w-5 h-5" />
             </button>
@@ -80,7 +80,7 @@ export default function Layout() {
         </footer>
       </main>
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md border-t border-slate-200/50 dark:border-slate-800/50 z-50 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.05)] transition-colors duration-500">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-[#1A1A1A]/80 backdrop-blur-md border-t border-slate-200/60 dark:border-white/5 z-50 pb-safe shadow-[0_-8px_30px_rgb(0,0,0,0.04)] dark:shadow-none transition-colors duration-500">
         <div className="max-w-7xl mx-auto flex justify-around items-center h-20 px-4">
           <NavButton to="/" icon={<Home className="w-6 h-6" />} label="Accueil" />
           <NavButton to="/map" icon={<MapIcon className="w-6 h-6" />} label="Carte" />
@@ -99,15 +99,15 @@ function NavButton({ to, icon, label }: { to: string; icon: React.ReactNode; lab
       className={({ isActive }) =>
         cn(
           "flex flex-col items-center gap-1.5 px-4 py-2 transition-all relative group",
-          isActive ? "text-emerald-600" : "text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
+          isActive ? "text-emerald-600 dark:text-emerald-400" : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
         )
       }
     >
       <div className="relative">
         {icon}
-        <span className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-500 rounded-full opacity-0 group-[.active]:opacity-100 transition-opacity" />
+        <span className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-500 rounded-full opacity-0 group-[.active]:opacity-100 transition-opacity shadow-sm" />
       </div>
-      <span className="text-[10px] font-bold uppercase tracking-[0.05em] transition-colors duration-500">{label}</span>
+      <span className="text-[10px] font-semibold uppercase tracking-[0.05em] transition-colors duration-500">{label}</span>
     </NavLink>
   );
 }

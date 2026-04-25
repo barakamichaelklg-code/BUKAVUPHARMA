@@ -62,12 +62,12 @@ export default function MapView() {
       {/* Map Placeholder - In a real app, use Google Maps or Leaflet */}
       <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:24px:24px] flex items-center justify-center">
         <div className="text-slate-300 dark:text-slate-800 text-center space-y-4">
-          <div className="w-20 h-20 bg-white dark:bg-slate-900 rounded-[2rem] shadow-figma flex items-center justify-center mx-auto border border-slate-100 dark:border-white/5">
-            <MapPin className="w-10 h-10 text-slate-200 dark:text-slate-800" />
+          <div className="w-20 h-20 bg-white dark:bg-[#201F1E] rounded-[2rem] shadow-sm flex items-center justify-center mx-auto border border-slate-200/60 dark:border-white/5">
+            <MapPin className="w-10 h-10 text-slate-300 dark:text-slate-700" />
           </div>
-          <div className="space-y-1">
-            <p className="text-base font-bold text-slate-400 dark:text-slate-600 font-display">Carte Interactive de Bukavu</p>
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-300 dark:text-slate-700">Ibanda • Kadutu • Bagira</p>
+          <div className="space-y-2">
+            <p className="text-base font-bold text-slate-500 dark:text-slate-400 font-display">Carte Interactive de Bukavu</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-600">Ibanda • Kadutu • Bagira</p>
           </div>
         </div>
 
@@ -92,27 +92,27 @@ export default function MapView() {
           >
             <div className="relative flex flex-col items-center">
               <motion.div 
-                whileHover={{ scale: 1.2, y: -5 }}
-                className={`p-2.5 rounded-2xl shadow-figma-lg border-2 transition-all duration-300 ${
+                whileHover={{ scale: 1.1, y: -4 }}
+                className={`p-2.5 rounded-2xl shadow-sm border transition-all duration-300 ${
                   selectedPharmacy?.id === p.id 
-                    ? "bg-emerald-600 border-emerald-400 scale-110 shadow-emerald-500/20" 
-                    : "bg-white dark:bg-slate-900 border-white dark:border-white/10 hover:border-emerald-200 dark:hover:border-emerald-500/30"
+                    ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900 dark:border-white shadow-md scale-110" 
+                    : "bg-white dark:bg-[#1A1A1A] border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20"
                 }`}
               >
-                <MapPin className={`w-6 h-6 ${
-                  selectedPharmacy?.id === p.id ? "text-white" : "text-emerald-500"
+                <MapPin className={`w-5 h-5 ${
+                  selectedPharmacy?.id === p.id ? "text-white dark:text-slate-900" : "text-emerald-600 dark:text-emerald-500"
                 }`} />
               </motion.div>
               
               {p.status === 'certified' && (
-                <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-white dark:bg-slate-800 rounded-lg shadow-figma flex items-center justify-center border border-slate-50 dark:border-white/10">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-white dark:bg-slate-800 rounded-lg shadow-sm flex items-center justify-center border border-slate-200/60 dark:border-white/10">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                 </div>
               )}
               
               {/* Tooltip on hover */}
               <div className="absolute -bottom-8 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                <div className="bg-slate-900 dark:bg-emerald-600 text-white text-[10px] font-bold px-2 py-1 rounded-lg shadow-xl">
+                <div className="bg-slate-900 dark:bg-emerald-600 text-white text-[10px] font-medium px-2 py-1 rounded-lg shadow-md">
                   {p.name}
                 </div>
               </div>
@@ -128,7 +128,7 @@ export default function MapView() {
             initial={{ y: 150, opacity: 0, scale: 0.95 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 150, opacity: 0, scale: 0.95 }}
-            className="w-full max-w-xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl rounded-[2.5rem] shadow-figma-lg border border-white/50 dark:border-white/10 p-7 space-y-6"
+            className="w-full max-w-xl bg-white/90 dark:bg-[#1A1A1A]/90 backdrop-blur-xl rounded-[2rem] shadow-lg border border-slate-200/60 dark:border-white/10 p-7 space-y-6"
           >
             <div className="flex justify-between items-start">
               <div className="space-y-2">
@@ -139,18 +139,18 @@ export default function MapView() {
                   {selectedPharmacy.status === 'certified' && (
                     <div className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 dark:bg-emerald-500/10 rounded-full border border-emerald-100 dark:border-emerald-500/20">
                       <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                      <span className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">Certifiée</span>
+                      <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">Certifiée</span>
                     </div>
                   )}
                 </div>
-                <div className="flex items-center gap-2 text-slate-400 dark:text-slate-500 font-medium text-sm">
-                  <MapPin className="w-4 h-4 text-emerald-500" />
+                <div className="flex items-center gap-2 text-slate-500 font-medium text-sm">
+                  <MapPin className="w-4 h-4 text-slate-400" />
                   <span>{selectedPharmacy.neighborhood} • {selectedPharmacy.address}</span>
                 </div>
               </div>
               <button 
                 onClick={() => setSelectedPharmacy(null)}
-                className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 dark:text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300 transition-all"
+                className="w-10 h-10 bg-slate-50 dark:bg-slate-800/50 rounded-[1rem] flex items-center justify-center text-slate-400 dark:text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-600 dark:hover:text-slate-300 transition-all border border-slate-200/60 dark:border-white/5"
               >
                 <Info className="w-5 h-5" />
               </button>
@@ -158,31 +158,31 @@ export default function MapView() {
 
             <div className="grid grid-cols-2 gap-4">
               <motion.a 
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
                 href={`tel:${selectedPharmacy.phone}`}
-                className="flex items-center justify-center gap-3 py-4 bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 text-slate-700 dark:text-slate-200 rounded-3xl font-bold text-sm shadow-figma hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
+                className="flex items-center justify-center gap-3 py-3 bg-white dark:bg-slate-800 border border-slate-200/60 dark:border-white/10 text-slate-700 dark:text-slate-200 rounded-[1.5rem] font-medium text-sm shadow-sm hover:shadow-md transition-all"
               >
-                <div className="w-8 h-8 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl flex items-center justify-center">
+                <div className="w-8 h-8 bg-slate-50 dark:bg-slate-900 rounded-[1rem] flex items-center justify-center border border-slate-100 dark:border-white/5">
                   <Phone className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <span className="font-display">Appeler</span>
               </motion.a>
               <motion.button 
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${selectedPharmacy.lat},${selectedPharmacy.lng}`, '_blank')}
-                className="flex items-center justify-center gap-3 py-4 bg-emerald-600 text-white rounded-3xl font-bold text-sm shadow-xl shadow-emerald-200 dark:shadow-emerald-900/20 hover:bg-emerald-700 transition-all"
+                className="flex items-center justify-center gap-3 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[1.5rem] font-medium text-sm shadow-sm hover:shadow-md transition-all"
               >
-                <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center">
-                  <Navigation className="w-4 h-4 text-white" />
+                <div className="w-8 h-8 bg-white/20 dark:bg-black/10 rounded-[1rem] flex items-center justify-center">
+                  <Navigation className="w-4 h-4 text-white dark:text-slate-900" />
                 </div>
                 <span className="font-display">Itinéraire</span>
               </motion.button>
             </div>
 
             {/* Search Medications */}
-            <div className="pt-4 border-t border-slate-100 dark:border-white/5 space-y-4">
+            <div className="pt-4 border-t border-slate-200/60 dark:border-white/10 space-y-4">
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input
@@ -190,7 +190,7 @@ export default function MapView() {
                   placeholder="Rechercher un médicament disponible..."
                   value={medSearchQuery}
                   onChange={(e) => setMedSearchQuery(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-white/5 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
+                  className="w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-[#201F1E] border border-slate-200/60 dark:border-white/5 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
                 />
               </div>
 
@@ -204,18 +204,18 @@ export default function MapView() {
                   pharmacyMeds
                     .filter(m => m.name.toLowerCase().includes(medSearchQuery.toLowerCase()) || m.molecule.toLowerCase().includes(medSearchQuery.toLowerCase()))
                     .map(med => (
-                      <div key={med.stockId} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-white/5">
+                      <div key={med.stockId} className="flex items-center justify-between p-3 bg-white dark:bg-[#201F1E] rounded-2xl border border-slate-200/60 dark:border-white/5 shadow-sm">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-white dark:bg-slate-800 rounded-xl flex items-center justify-center shadow-sm">
-                            <Pill className="w-5 h-5 text-emerald-500" />
+                          <div className="w-10 h-10 bg-slate-50 dark:bg-[#1A1A1A] rounded-[1rem] flex items-center justify-center border border-slate-100 dark:border-white/5">
+                            <Pill className="w-5 h-5 text-emerald-600 dark:text-emerald-500" />
                           </div>
                           <div>
                             <p className="font-bold text-slate-900 dark:text-white text-sm">{med.name}</p>
-                            <p className="text-xs text-slate-500">{med.molecule}</p>
+                            <p className="text-xs text-slate-500 font-medium">{med.molecule}</p>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="font-bold text-emerald-600 dark:text-emerald-400">{med.price} FC</p>
+                          <p className="font-bold text-slate-900 dark:text-white font-display text-lg">{med.price} FC</p>
                         </div>
                       </div>
                     ))

@@ -359,9 +359,9 @@ export default function Profile({ user }: { user: User }) {
                   <img src={user.photoURL} alt={user.displayName || ''} className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-500 to-emerald-600">
-                    <span className="text-4xl font-black text-white uppercase font-display">
-                      {user.displayName?.[0] || user.email?.[0]}
-                    </span>
+                <span className="text-3xl font-bold text-white font-display">
+                  {user.displayName?.[0] || user.email?.[0]}
+                </span>
                   </div>
                 )}
               </div>
@@ -370,115 +370,115 @@ export default function Profile({ user }: { user: User }) {
               </div>
             </div>
             
-            <div className="text-center space-y-1">
-              <h2 className="text-2xl font-bold text-slate-900 dark:text-white font-display tracking-tight">
+            <div className="text-center space-y-2">
+              <h2 className="text-3xl font-bold text-slate-900 dark:text-white font-display tracking-tight">
                 {profile?.name || user.displayName || 'Utilisateur'}
               </h2>
-              <p className="text-sm text-slate-400 dark:text-slate-500 font-bold uppercase tracking-[0.15em]">{user.email}</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 font-medium tracking-wide">{user.email}</p>
             </div>
           </div>
 
           {/* Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
             <motion.div 
-              whileHover={{ y: -4 }}
-              className="p-5 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-white/5 shadow-figma text-center space-y-2 group hover:border-emerald-100 dark:hover:border-emerald-500/30 transition-colors"
+              whileHover={{ y: -2 }}
+              className="p-5 bg-white dark:bg-slate-900 rounded-[1.5rem] border border-slate-200/60 dark:border-white/10 shadow-sm text-center space-y-3 group hover:shadow-md transition-all"
             >
-              <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl flex items-center justify-center mx-auto mb-1 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-500/20 transition-colors">
+              <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-500/10 rounded-[1rem] flex items-center justify-center mx-auto mb-1">
                 <ShoppingBag className="w-5 h-5 text-emerald-600" />
               </div>
-              <p className="text-3xl font-black text-emerald-600 font-display">{orders.length}</p>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest">Commandes</p>
+              <p className="text-3xl font-black text-slate-900 dark:text-white font-display">{orders.length}</p>
+              <p className="text-xs text-slate-500 font-medium tracking-wide">Commandes</p>
             </motion.div>
             
             <motion.div 
-              whileHover={{ y: -4 }}
-              className="p-5 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-white/5 shadow-figma text-center space-y-2 group hover:border-emerald-100 dark:hover:border-emerald-500/30 transition-colors"
+              whileHover={{ y: -2 }}
+              className="p-5 bg-white dark:bg-slate-900 rounded-[1.5rem] border border-slate-200/60 dark:border-white/10 shadow-sm text-center space-y-3 group hover:shadow-md transition-all"
             >
-              <div className="w-10 h-10 bg-rose-50 dark:bg-rose-500/10 rounded-xl flex items-center justify-center mx-auto mb-1 group-hover:bg-rose-100 dark:group-hover:bg-rose-500/20 transition-colors">
-                <Heart className="w-5 h-5 text-rose-500" />
+              <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-[1rem] flex items-center justify-center mx-auto mb-1">
+                <Heart className="w-5 h-5 text-slate-600 dark:text-slate-400" />
               </div>
-              <p className="text-3xl font-black text-rose-500 font-display">4</p>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest">Favoris</p>
+              <p className="text-3xl font-black text-slate-900 dark:text-white font-display">4</p>
+              <p className="text-xs text-slate-500 font-medium tracking-wide">Favoris</p>
             </motion.div>
 
             <motion.div 
-              whileHover={{ y: -4 }}
-              className="p-5 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-white/5 shadow-figma text-center space-y-2 group hover:border-emerald-100 dark:hover:border-emerald-500/30 transition-colors"
+              whileHover={{ y: -2 }}
+              className="p-5 bg-white dark:bg-slate-900 rounded-[1.5rem] border border-slate-200/60 dark:border-white/10 shadow-sm text-center space-y-3 group hover:shadow-md transition-all"
             >
-              <div className="w-10 h-10 bg-blue-50 dark:bg-blue-500/10 rounded-xl flex items-center justify-center mx-auto mb-1 group-hover:bg-blue-100 dark:group-hover:bg-blue-500/20 transition-colors">
-                <ShieldCheck className="w-5 h-5 text-blue-500" />
+              <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-[1rem] flex items-center justify-center mx-auto mb-1">
+                <ShieldCheck className="w-5 h-5 text-slate-600 dark:text-slate-400" />
               </div>
-              <p className="text-3xl font-black text-blue-500 font-display">1</p>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest">Compte</p>
+              <p className="text-3xl font-black text-slate-900 dark:text-white font-display">1</p>
+              <p className="text-xs text-slate-500 font-medium tracking-wide">Comptes</p>
             </motion.div>
 
             <motion.div 
-              whileHover={{ y: -4 }}
-              className="p-5 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-white/5 shadow-figma text-center space-y-2 group hover:border-emerald-100 dark:hover:border-emerald-500/30 transition-colors"
+              whileHover={{ y: -2 }}
+              className="p-5 bg-white dark:bg-slate-900 rounded-[1.5rem] border border-slate-200/60 dark:border-white/10 shadow-sm text-center space-y-3 group hover:shadow-md transition-all"
             >
-              <div className="w-10 h-10 bg-amber-50 dark:bg-amber-500/10 rounded-xl flex items-center justify-center mx-auto mb-1 group-hover:bg-amber-100 dark:group-hover:bg-amber-500/20 transition-colors">
-                <Clock className="w-5 h-5 text-amber-500" />
+              <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-[1rem] flex items-center justify-center mx-auto mb-1">
+                <Clock className="w-5 h-5 text-slate-600 dark:text-slate-400" />
               </div>
-              <p className="text-3xl font-black text-amber-500 font-display">24h</p>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest">Support</p>
+              <p className="text-3xl font-black text-slate-900 dark:text-white font-display">24h</p>
+              <p className="text-xs text-slate-500 font-medium tracking-wide">Support</p>
             </motion.div>
           </div>
 
           {/* Menu Options */}
-          <div className="space-y-4">
-            <h3 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-2">Paramètres</h3>
+          <div className="space-y-4 max-w-2xl mx-auto w-full">
+            <h3 className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Paramètres</h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-3">
               <button 
                 onClick={() => setView('settings')}
-                className="w-full p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-3xl font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-white/5 hover:border-emerald-100 dark:hover:border-emerald-500/30 transition-all text-left flex items-center justify-between shadow-figma group active:scale-[0.98]"
+                className="w-full p-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-white/10 rounded-[1.5rem] text-slate-700 dark:text-slate-200 hover:shadow-md transition-all text-left flex items-center justify-between shadow-sm group active:scale-[0.98]"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/20 transition-colors">
-                    <Settings className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-emerald-600" />
+                  <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-[1rem] flex items-center justify-center group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/10 transition-colors">
+                    <Settings className="w-5 h-5 text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-500" />
                   </div>
-                  <span className="text-base font-display">Paramètres du compte</span>
+                  <span className="text-base font-medium">Paramètres du compte</span>
                 </div>
-                <ChevronRight className="w-5 h-5 text-slate-300 dark:text-slate-600 group-hover:text-emerald-600 transition-colors" />
+                <ChevronRight className="w-5 h-5 text-slate-300 dark:text-slate-600 group-hover:text-emerald-600 dark:group-hover:text-emerald-500 transition-colors" />
               </button>
 
               <button 
                 onClick={() => setView('history')}
-                className="w-full p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-3xl font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-white/5 hover:border-emerald-100 dark:hover:border-emerald-500/30 transition-all text-left flex items-center justify-between shadow-figma group active:scale-[0.98]"
+                className="w-full p-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-white/10 rounded-[1.5rem] text-slate-700 dark:text-slate-200 hover:shadow-md transition-all text-left flex items-center justify-between shadow-sm group active:scale-[0.98]"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/20 transition-colors">
-                    <History className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-emerald-600" />
+                  <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-[1rem] flex items-center justify-center group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/10 transition-colors">
+                    <History className="w-5 h-5 text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-500" />
                   </div>
-                  <span className="text-base font-display">Historique des paiements</span>
+                  <span className="text-base font-medium">Historique des paiements</span>
                 </div>
-                <ChevronRight className="w-5 h-5 text-slate-300 dark:text-slate-600 group-hover:text-emerald-600 transition-colors" />
+                <ChevronRight className="w-5 h-5 text-slate-300 dark:text-slate-600 group-hover:text-emerald-600 dark:group-hover:text-emerald-500 transition-colors" />
               </button>
 
               <a 
                 href="https://wa.me/243979307569" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-full p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-3xl font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-white/5 hover:border-emerald-100 dark:hover:border-emerald-500/30 transition-all text-left flex items-center justify-between shadow-figma group active:scale-[0.98]"
+                className="w-full p-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-white/10 rounded-[1.5rem] text-slate-700 dark:text-slate-200 hover:shadow-md transition-all text-left flex items-center justify-between shadow-sm group active:scale-[0.98]"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/20 transition-colors">
-                    <Phone className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-emerald-600" />
+                  <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-[1rem] flex items-center justify-center group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/10 transition-colors">
+                    <Phone className="w-5 h-5 text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-500" />
                   </div>
-                  <span className="text-base font-display">Support Client (WhatsApp)</span>
+                  <span className="text-base font-medium">Support Client (WhatsApp)</span>
                 </div>
-                <ChevronRight className="w-5 h-5 text-slate-300 dark:text-slate-600 group-hover:text-emerald-600 transition-colors" />
+                <ChevronRight className="w-5 h-5 text-slate-300 dark:text-slate-600 group-hover:text-emerald-600 dark:group-hover:text-emerald-500 transition-colors" />
               </a>
             </div>
 
             <div className="pt-6">
               <button 
                 onClick={() => setShowLogoutConfirm(true)}
-                className="w-full p-5 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-3xl font-bold hover:bg-rose-100 dark:hover:bg-rose-500/20 transition-all text-center flex items-center justify-center gap-3 active:scale-[0.98] shadow-sm"
+                className="w-full p-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-white/10 text-rose-600 dark:text-rose-400 rounded-[1.5rem] font-medium hover:shadow-md transition-all text-center flex items-center justify-center gap-3 active:scale-[0.98] shadow-sm"
               >
-                <LogOut className="w-5 h-5" />
-                <span className="font-display text-base">Se déconnecter</span>
+                <LogOut className="w-4 h-4" />
+                <span className="text-base">Se déconnecter</span>
               </button>
             </div>
           </div>
