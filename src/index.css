@@ -32,12 +32,15 @@
   --color-slate-800: #46413a;
   --color-slate-900: #332f2b;
   --color-slate-950: #211e1a;
+
+  --radius-card: 2rem;
+  --radius-button: 1.25rem;
 }
 
 @layer base {
   body {
-    @apply antialiased text-slate-900 dark:text-slate-100 bg-[#FAF9F6] dark:bg-[#1A1A1A] selection:bg-emerald-100 dark:selection:bg-emerald-900 selection:text-emerald-900 dark:selection:text-emerald-100 min-h-screen transition-colors duration-500 ease-in-out;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    @apply antialiased text-slate-900 dark:text-slate-100 bg-[#FAF9F6] dark:bg-[#1A1A1A] selection:bg-emerald-100 dark:selection:bg-emerald-900 selection:text-emerald-900 dark:selection:text-emerald-100 min-h-screen transition-colors duration-500 ease-in-out font-sans;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -48,6 +51,18 @@
 @layer utilities {
   .glass {
     @apply bg-white/80 dark:bg-[#1A1A1A]/80 backdrop-blur-md border border-slate-200/50 dark:border-white/5 transition-all duration-500 ease-in-out;
+  }
+  
+  .card-premium {
+    @apply bg-white dark:bg-slate-950 border border-slate-200/60 dark:border-white/10 rounded-[2rem] shadow-sm hover:shadow-md transition-all duration-300;
+  }
+
+  .input-premium {
+    @apply bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-white/10 rounded-[1.25rem] px-5 py-4 outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500;
+  }
+
+  .button-premium {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-4 bg-emerald-600 dark:bg-emerald-500 text-white dark:text-slate-950 rounded-[1.25rem] font-semibold transition-all active:scale-[0.98] shadow-sm hover:shadow-md hover:bg-emerald-700 dark:hover:bg-emerald-400;
   }
   
   .shadow-figma {

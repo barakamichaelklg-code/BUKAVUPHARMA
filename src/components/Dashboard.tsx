@@ -98,38 +98,53 @@ export default function Dashboard() {
   });
 
   return (
-    <div className="p-5 space-y-10 font-sans transition-colors duration-500 min-h-screen">
+    <div className="max-w-6xl mx-auto space-y-12 py-4">
       {/* Hero Section */}
-      <div className="relative overflow-hidden rounded-[2.5rem] p-10 gradient-emerald shadow-sm dark:border dark:border-white/5 border flex flex-col justify-center min-h-[280px]">
-        <div className="absolute top-0 right-0 -mr-10 -mt-10 w-64 h-64 bg-slate-400/5 dark:bg-white/5 rounded-full blur-3xl opacity-50" />
-        <div className="absolute bottom-0 left-0 -ml-10 -mb-10 w-40 h-40 bg-emerald-400/5 dark:bg-emerald-400/10 rounded-full blur-3xl" />
+      <section className="relative overflow-hidden rounded-[2.5rem] p-8 md:p-12 bg-[#EFECE5] dark:bg-[#1C1C1B] border border-slate-200/50 dark:border-white/5 shadow-sm min-h-[320px] flex items-center">
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-60 h-60 bg-emerald-500/5 rounded-full blur-3xl" />
         
-        <div className="relative z-10 space-y-6 max-w-xl">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/50 dark:bg-white/5 backdrop-blur-md rounded-full border border-slate-200 dark:border-white/10">
+        <div className="relative z-10 max-w-2xl space-y-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/50 dark:bg-white/5 backdrop-blur-md rounded-full border border-slate-200 dark:border-white/10"
+          >
             <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-500" />
-            <span className="text-[11px] font-black text-slate-700 dark:text-white tracking-widest uppercase">Santé Certifiée RDC</span>
-          </div>
-          <div className="space-y-3">
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.1] font-display">
-              Trouvez vos médicaments<br />en un instant
-            </h1>
-            <p className="text-slate-600 dark:text-slate-300 max-w-xs text-base font-medium leading-relaxed">
-              Explorez les pharmacies de Bukavu et trouvez ce qu'il vous faut.
-            </p>
+            <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 tracking-widest uppercase">Pharmacies Certifiées de Bukavu</span>
+          </motion.div>
+          
+          <div className="space-y-4">
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-4xl md:text-6xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.05] font-display"
+            >
+              Votre santé, à portée<br />de main à <span className="text-emerald-600 dark:text-emerald-500 italic">Bukavu</span>
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-lg text-slate-600 dark:text-slate-400 max-w-md font-medium leading-relaxed"
+            >
+              Recherchez, localisez et commandez vos médicaments en toute sécurité auprès des meilleures pharmacies locales.
+            </motion.p>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Search Bar - Claude UI Style */}
-      <div className="relative group -mt-8 z-20 px-6 max-w-4xl mx-auto">
-        <div className="absolute inset-y-0 left-12 flex items-center pointer-events-none">
-          <Search className="w-5 h-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+      <div className="relative max-w-3xl mx-auto -mt-10 px-4">
+        <div className="absolute inset-y-0 left-10 flex items-center pointer-events-none z-10">
+          <Search className="w-5 h-5 text-slate-400" />
         </div>
         <input
           id="main-search"
           type="text"
           placeholder="Rechercher un médicament ou une pharmacie..."
-          className="w-full pl-16 pr-6 py-5 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-white/10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 font-sans text-base text-slate-900 dark:text-white"
+          className="w-full pl-14 pr-8 py-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-[2rem] shadow-xl shadow-slate-200/40 dark:shadow-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-500/50 outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 text-lg"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -140,10 +155,10 @@ export default function Dashboard() {
 
       {/* Admin Actions */}
       {isAdmin && (
-        <div className="flex justify-end px-2">
+        <div className="flex justify-end px-4">
           <button 
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-2xl font-bold shadow-lg shadow-emerald-100 dark:shadow-emerald-900/20 active:scale-95 transition-all"
+            className="flex items-center gap-2 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold shadow-lg shadow-slate-200 dark:shadow-none hover:bg-emerald-600 dark:hover:bg-emerald-500 hover:text-white transition-all active:scale-95"
           >
             <Plus className="w-5 h-5" /> Ajouter un médicament
           </button>
@@ -151,148 +166,162 @@ export default function Dashboard() {
       )}
 
       {/* Quick Categories */}
-      <div className="space-y-4 px-2 max-w-5xl mx-auto">
-        <h3 className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Catégories</h3>
-        <div className="flex flex-wrap gap-3">
-          {['Paludisme', 'Douleur', 'Antibio', 'Diabète'].map((cat) => (
-            <button 
-              key={cat} 
-              onClick={() => setSelectedCategory(selectedCategory === cat ? null : cat)}
-              className={cn(
-                "flex items-center gap-2.5 px-5 py-3 rounded-full border transition-all active:scale-[0.98]",
-                selectedCategory === cat 
-                  ? "bg-slate-900 border-slate-900 text-white dark:bg-white dark:border-white dark:text-slate-900 shadow-md" 
-                  : "bg-white dark:bg-slate-900 border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-white/20 shadow-sm"
-              )}
-            >
-              <Pill className={cn("w-4 h-4", selectedCategory === cat ? "text-emerald-400 dark:text-emerald-600" : "text-slate-400")} />
-              <span className="text-sm font-medium">{cat}</span>
-            </button>
-          ))}
+      <section className="space-y-6">
+        <div className="flex items-center justify-between px-4">
+          <h3 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Catégories populaires</h3>
         </div>
-      </div>
-
-      {/* Certified Pharmacies */}
-      <section className="space-y-6 max-w-5xl mx-auto px-2">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white font-display tracking-tight">Pharmacies Certifiées</h2>
-          <Link to="/map" className="text-emerald-600 text-sm font-medium flex items-center gap-1 hover:gap-2 transition-all">
-            Voir sur la carte <ChevronRight className="w-4 h-4 text-emerald-500" />
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filteredPharmacies.length > 0 ? (
-            filteredPharmacies.slice(0, 3).map((pharmacy) => (
-              <motion.div
-                key={pharmacy.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/60 dark:border-white/10 shadow-sm hover:shadow-md transition-all group cursor-pointer"
+        <div className="flex flex-wrap gap-3 px-4 overflow-x-auto pb-2 scrollbar-none">
+          {['Paludisme', 'Douleur', 'Antibiotiques', 'Diabète', 'Vitamines', 'Pédiatrie'].map((cat) => {
+            const isSelected = selectedCategory === (cat === 'Antibiotiques' ? 'Antibio' : cat);
+            const actualCat = cat === 'Antibiotiques' ? 'Antibio' : cat;
+            return (
+              <button 
+                key={cat} 
+                onClick={() => setSelectedCategory(isSelected ? null : actualCat)}
+                className={cn(
+                  "flex items-center gap-2.5 px-6 py-4 rounded-[1.25rem] border transition-all active:scale-[0.98] whitespace-nowrap font-semibold text-sm",
+                  isSelected
+                    ? "bg-slate-900 border-slate-900 text-white dark:bg-white dark:border-white dark:text-slate-900 shadow-lg shadow-slate-900/10 dark:shadow-white/10" 
+                    : "bg-white dark:bg-slate-900 border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-white/20"
+                )}
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-emerald-50 dark:bg-emerald-500/10 rounded-[1.25rem] flex items-center justify-center">
-                    <MapPin className="w-6 h-6 text-emerald-600 dark:text-emerald-500" />
-                  </div>
-                  {(() => {
-                    const hour = new Date().getHours();
-                    // Basic logic: open 8h-21h. We add a pseudo-random check based on ID length to simulate some closed pharmacies for demo purposes.
-                    const isAlwaysOpen = pharmacy.name.includes('24');
-                    const isOpen = isAlwaysOpen || ((hour >= 8 && hour < 21) && pharmacy.id.length % 3 !== 0);
-                    return isOpen ? (
-                      <span className="text-[10px] bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider flex items-center gap-1 border border-emerald-200/50 dark:border-emerald-500/20">
-                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                        Ouvert
-                      </span>
-                    ) : (
-                      <span className="text-[10px] bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider flex items-center gap-1 border border-red-200/50 dark:border-red-500/20">
-                        <span className="w-1.5 h-1.5 bg-red-500 rounded-full" />
-                        Fermé
-                      </span>
-                    );
-                  })()}
-                </div>
-                
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-bold text-slate-900 dark:text-white text-lg">{pharmacy.name}</h3>
-                    <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                  </div>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">{pharmacy.neighborhood}</p>
-                </div>
-              </motion.div>
-            ))
-          ) : (
-            <div className="col-span-full py-12 text-slate-400 text-center font-medium bg-slate-50 dark:bg-slate-900/50 rounded-3xl border border-slate-200/50 dark:border-white/5">
-              Aucune pharmacie trouvée dans votre secteur.
-            </div>
-          )}
+                <Pill className={cn("w-4 h-4", isSelected ? "text-emerald-400 dark:text-emerald-500" : "text-emerald-600 dark:text-emerald-500")} />
+                {cat}
+              </button>
+            );
+          })}
         </div>
       </section>
 
       {/* Featured Medications */}
-      <section className="space-y-6 max-w-5xl mx-auto px-2">
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white font-display tracking-tight">
-          {selectedCategory ? `Catégorie: ${selectedCategory}` : "Médicaments Essentiels"}
-        </h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+      <section className="space-y-8 px-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white font-display tracking-tight">
+            {selectedCategory ? `Résultats pour ${selectedCategory}` : "Médicaments essentiels"}
+          </h2>
+          <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+            {filteredMeds.length} produits
+          </span>
+        </div>
+        
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredMeds.length > 0 ? (
-            filteredMeds.map((med) => (
+            filteredMeds.map((med, index) => (
               <motion.div
                 key={med.id}
-                whileHover={{ y: -4 }}
-                className="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-3xl border border-slate-200/60 dark:border-white/10 shadow-sm hover:shadow-md transition-all flex flex-col"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+                whileHover={{ y: -6 }}
+                className="group card-premium overflow-hidden flex flex-col h-full bg-white dark:bg-slate-950"
               >
-                <Link to={`/product/${med.id}`} className="group flex-1 flex flex-col">
-                  <div className="relative w-full aspect-square bg-slate-50 dark:bg-slate-800/50 rounded-[1.5rem] mb-4 overflow-hidden border border-slate-100 dark:border-white/5 isolate">
+                <Link to={`/product/${med.id}`} className="flex flex-col h-full">
+                  <div className="relative aspect-[4/5] bg-slate-50 dark:bg-slate-900 overflow-hidden border-b border-slate-100 dark:border-white/5">
                     {med.imageUrl && med.imageUrl !== '❓' ? (
                       <img 
                         src={med.imageUrl} 
                         alt={med.name} 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         referrerPolicy="no-referrer"
-                        onError={(e) => {
-                          e.currentTarget.src = "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800";
-                        }}
                       />
                     ) : (
-                      <img 
-                        src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800" 
-                        alt={med.name} 
-                        className="w-full h-full object-cover opacity-60 transition-transform duration-700 group-hover:scale-105"
-                        referrerPolicy="no-referrer"
-                        style={{ filter: 'grayscale(0.5)' }}
-                      />
+                      <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-900">
+                        <Pill className="w-12 h-12 text-slate-300 dark:text-slate-800" />
+                      </div>
                     )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     
                     {isAdmin && (
                       <button
                         onClick={(e) => handleDeleteMedication(e, med.id)}
-                        className="absolute top-2 right-2 p-2 bg-white/90 dark:bg-slate-900/90 hover:bg-rose-50 dark:hover:bg-rose-900/30 text-rose-500 rounded-xl transition-all shadow-sm z-30"
+                        className="absolute top-4 right-4 p-2 bg-white/90 dark:bg-slate-800/90 hover:bg-rose-500 hover:text-white text-rose-500 rounded-xl transition-all shadow-sm z-30 backdrop-blur-sm"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     )}
                   </div>
                   
-                  <div className="flex-1 space-y-1">
-                    <h3 className="font-semibold text-slate-900 dark:text-white text-base leading-snug">{med.name}</h3>
-                    <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium tracking-wide uppercase">{med.molecule}</p>
-                  </div>
-                  
-                  <div className="mt-4 pt-4 border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
-                    <span className="font-bold text-slate-900 dark:text-white">{med.standardPrice.toLocaleString()} FC</span>
-                    <div className="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors text-slate-400">
-                      <Plus className="w-4 h-4" />
+                  <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                    <div className="space-y-1.5">
+                      <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-500 uppercase tracking-[0.15em] mb-1">{med.molecule}</p>
+                      <h3 className="font-bold text-slate-900 dark:text-white text-lg leading-tight group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">{med.name}</h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 font-medium">{med.description || "Indication thérapeutique"}</p>
+                    </div>
+                    
+                    <div className="flex items-center justify-between pt-2">
+                      <div className="flex flex-col">
+                        <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">Prix estimé</span>
+                        <span className="font-bold text-slate-900 dark:text-white text-xl">{med.standardPrice.toLocaleString()} <span className="text-[10px] font-bold text-slate-400">FC</span></span>
+                      </div>
+                      <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all transform group-hover:translate-x-1">
+                        <ChevronRight className="w-5 h-5" />
+                      </div>
                     </div>
                   </div>
                 </Link>
               </motion.div>
             ))
           ) : (
-            <div className="col-span-full py-12 text-slate-400 text-center font-medium bg-slate-50 dark:bg-slate-900/50 rounded-3xl border border-slate-200/50 dark:border-white/5">
-              Aucun médicament ne correspond à votre recherche.
+            <div className="col-span-full py-20 text-center space-y-4 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-[2.5rem]">
+              <div className="w-16 h-16 bg-slate-50 dark:bg-slate-900 rounded-full flex items-center justify-center mx-auto">
+                <Search className="w-6 h-6 text-slate-300 dark:text-slate-700" />
+              </div>
+              <div className="space-y-1">
+                <p className="text-slate-900 dark:text-white font-bold text-lg font-display">Aucun médicament trouvé</p>
+                <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Réessayez avec d'autres mots-clés ou catégories.</p>
+              </div>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Featured Pharmacies */}
+      <section className="space-y-8 px-4 pb-12">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white font-display tracking-tight">Pharmacies à proximité</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Vérifiez la disponibilité en temps réel</p>
+          </div>
+          <Link to="/map" className="button-premium px-5 py-3 !rounded-[1rem] !text-sm">
+            <MapPin className="w-4 h-4" />
+            Explorer
+          </Link>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {filteredPharmacies.slice(0, 4).map((pharmacy) => (
+            <Link 
+              to={`/pharmacy/${pharmacy.id}`} 
+              key={pharmacy.id}
+              className="group card-premium p-6 flex items-center gap-6 hover:border-emerald-500/30 transition-all cursor-pointer"
+            >
+              <div className="w-16 h-16 bg-[#EFECE5] dark:bg-emerald-950/30 rounded-[1.5rem] flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                <MapPin className="w-8 h-8 text-emerald-600 dark:text-emerald-500" />
+              </div>
+              <div className="flex-1 min-w-0 space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-slate-900 dark:text-white text-xl truncate font-display">{pharmacy.name}</h3>
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 rounded-full text-[10px] font-bold uppercase tracking-widest border border-emerald-100 dark:border-emerald-500/20">
+                    <ShieldCheck className="w-3 h-3" />
+                    Certifié
+                  </div>
+                </div>
+                <div className="flex flex-wrap items-center gap-y-1 gap-x-4">
+                  <span className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1.5 font-medium">
+                    <MapPin className="w-3.5 h-3.5" />
+                    {pharmacy.neighborhood}
+                  </span>
+                  <span className="text-sm text-emerald-600 dark:text-emerald-500 flex items-center gap-1.5 font-bold uppercase tracking-tight">
+                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                    Ouvert 24/7
+                  </span>
+                </div>
+              </div>
+              <div className="p-3 rounded-full bg-slate-50 dark:bg-slate-900 text-slate-400 group-hover:text-emerald-600 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-950/50 transition-all">
+                <ChevronRight className="w-6 h-6" />
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
 

@@ -16,27 +16,30 @@ export default function Layout() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col font-sans transition-colors duration-500 bg-transparent">
+    <div className="min-h-screen flex flex-col font-sans transition-colors duration-500 bg-[#FAF9F6] dark:bg-[#121212]">
       {/* Header */}
-      <header className="bg-white/80 dark:bg-[#1A1A1A]/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200/60 dark:border-white/5 transition-colors duration-500">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-emerald-600 rounded-[0.8rem] flex items-center justify-center shadow-md">
-              <Pill className="text-white w-5 h-5" />
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#FAF9F6]/80 dark:bg-[#121212]/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-white/5">
+        <div className="max-w-6xl mx-auto h-20 px-6 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 bg-slate-900 dark:bg-white rounded-[1.25rem] flex items-center justify-center shadow-lg shadow-slate-200 dark:shadow-none transition-transform active:scale-95">
+              <Pill className="text-white dark:text-slate-900 w-5 h-5" />
             </div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight font-display transition-colors duration-500">PharmaBukavu</h1>
+            <div className="flex flex-col -space-y-0.5">
+              <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight font-display">PharmaBukavu</h1>
+              <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-500 uppercase tracking-[0.2em]">Réseau Certifié</span>
+            </div>
           </div>
-          <div className="flex items-center gap-1">
+
+          <div className="flex items-center gap-2">
             <button 
               onClick={toggleDarkMode}
-              className="p-2.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5 rounded-[0.8rem] transition-all active:scale-95"
-              aria-label="Basculer le thème"
+              className="p-3 text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 rounded-2xl transition-all active:scale-95"
             >
               {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
             <button 
               onClick={handleSearchClick}
-              className="p-2.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5 rounded-[0.8rem] transition-all active:scale-95"
+              className="p-3 text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 rounded-2xl transition-all active:scale-95 hidden sm:block"
             >
               <Search className="w-5 h-5" />
             </button>
@@ -45,70 +48,103 @@ export default function Layout() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 pb-32 transition-colors duration-500 flex flex-col">
-        <div className="flex-1">
+      <main className="flex-1 mt-24 pb-32">
+        <div className="px-4 sm:px-6">
           <Outlet />
         </div>
         
         {/* Global Footer */}
-        <footer className="mt-16 pt-8 border-t border-slate-200/60 dark:border-slate-800/60 flex flex-col items-center justify-center gap-4 text-sm text-slate-500 dark:text-slate-400 pb-8">
-          <div className="flex items-center gap-2 text-slate-900 dark:text-slate-100 font-medium mb-2">
-            <Pill className="w-5 h-5 text-emerald-600" />
-            <span>PharmaBukavu</span>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
-            <div className="flex items-center gap-2 hover:text-emerald-600 transition-colors">
-              <MapPin className="w-4 h-4" />
-              <span>Bukavu, RDC</span>
+        <footer className="mt-20 py-16 border-t border-slate-100 dark:border-white/5">
+          <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-sm">
+            <div className="space-y-6">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-slate-900 dark:bg-white rounded-xl flex items-center justify-center">
+                  <Pill className="text-white dark:text-slate-900 w-4 h-4" />
+                </div>
+                <span className="text-lg font-bold text-slate-900 dark:text-white font-display">PharmaBukavu</span>
+              </div>
+              <p className="text-slate-500 dark:text-slate-400 leading-relaxed max-w-xs font-medium">
+                La première plateforme de recherche et commande de médicaments certifiés à Bukavu, Sud-Kivu.
+              </p>
             </div>
             
-            <a href="mailto:barakamichaelklg@gmail.com" className="flex items-center gap-2 hover:text-emerald-600 transition-colors">
-              <Mail className="w-4 h-4" />
-              <span>barakamichaelklg@gmail.com</span>
-            </a>
-            
-            <a href="https://wa.me/243979307569" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-emerald-600 transition-colors">
-              <MessageCircle className="w-4 h-4" />
-              <span>+243 979 307 569</span>
-            </a>
+            <div className="space-y-4">
+              <h4 className="font-bold text-slate-900 dark:text-white font-display uppercase tracking-widest text-[10px]">Contact</h4>
+              <ul className="space-y-3 text-slate-500 dark:text-slate-400 font-medium">
+                <li className="flex items-center gap-3">
+                  <MapPin className="w-4 h-4 text-emerald-600" />
+                  Bukavu, RDC
+                </li>
+                <li>
+                  <a href="mailto:contact@pharmabukavu.cd" className="flex items-center gap-3 hover:text-emerald-600 transition-colors">
+                    <Mail className="w-4 h-4 text-emerald-600" />
+                    contact@pharmabukavu.cd
+                  </a>
+                </li>
+                <li>
+                  <a href="tel:+243979307569" className="flex items-center gap-3 hover:text-emerald-600 transition-colors">
+                    <MessageCircle className="w-4 h-4 text-emerald-600" />
+                    +243 979 307 569
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div className="space-y-4 lg:col-span-2">
+              <h4 className="font-bold text-slate-900 dark:text-white font-display uppercase tracking-widest text-[10px]">Newsletter</h4>
+              <p className="text-slate-500 dark:text-slate-400 font-medium">Recevez des alertes sur la disponibilité des médicaments essentiels.</p>
+              <div className="flex gap-2">
+                <input 
+                  type="email" 
+                  placeholder="votre@email.com"
+                  className="flex-1 h-12 px-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 outline-none focus:border-emerald-500 transition-all font-medium"
+                />
+                <button className="px-6 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold hover:bg-emerald-600 transition-all">
+                  Ok
+                </button>
+              </div>
+            </div>
           </div>
           
-          <div className="text-xs mt-4 opacity-70">
-            © {new Date().getFullYear()} PharmaBukavu. Tous droits réservés.
+          <div className="max-w-6xl mx-auto px-6 mt-16 pt-8 border-t border-slate-50 dark:border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
+            <span>© {new Date().getFullYear()} PharmaBukavu</span>
+            <div className="flex gap-8">
+              <a href="#" className="hover:text-emerald-600 transition-colors">Mentions Légales</a>
+              <a href="#" className="hover:text-emerald-600 transition-colors">Confidentialité</a>
+            </div>
           </div>
         </footer>
       </main>
+
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-[#1A1A1A]/80 backdrop-blur-md border-t border-slate-200/60 dark:border-white/5 z-50 pb-safe shadow-[0_-8px_30px_rgb(0,0,0,0.04)] dark:shadow-none transition-colors duration-500">
-        <div className="max-w-7xl mx-auto flex justify-around items-center h-20 px-4">
-          <NavButton to="/" icon={<Home className="w-6 h-6" />} label="Accueil" />
-          <NavButton to="/map" icon={<MapIcon className="w-6 h-6" />} label="Carte" />
+      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[min(calc(100%-2rem),480px)] z-50">
+        <div className="bg-slate-900/90 dark:bg-white/90 backdrop-blur-xl rounded-[2rem] h-20 px-8 flex justify-between items-center shadow-2xl shadow-slate-900/20 dark:shadow-none border border-white/10 dark:border-slate-900/10">
+          <NavButton to="/" icon={<Home className="w-6 h-6" />} />
+          <NavButton to="/map" icon={<MapIcon className="w-6 h-6" />} />
           <NavButton to="/messages" icon={<MessageCircle className="w-6 h-6" />} label="Messages" />
-          <NavButton to="/cart" icon={<ShoppingCart className="w-6 h-6" />} label="Panier" />
-          <NavButton to="/profile" icon={<User className="w-6 h-6" />} label="Profil" />
+          <NavButton to="/cart" icon={<ShoppingCart className="w-6 h-6" />} />
+          <NavButton to="/profile" icon={<User className="w-6 h-6" />} />
         </div>
       </nav>
     </div>
   );
 }
 
-function NavButton({ to, icon, label }: { to: string; icon: React.ReactNode; label: string }) {
+function NavButton({ to, icon, label }: { to: string; icon: React.ReactNode; label?: string }) {
   return (
     <NavLink
       to={to}
       className={({ isActive }) =>
         cn(
-          "flex flex-col items-center gap-1.5 px-4 py-2 transition-all relative group",
-          isActive ? "text-emerald-600 dark:text-emerald-400" : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+          "relative flex items-center justify-center w-12 h-12 transition-all duration-500 rounded-2xl group",
+          isActive 
+            ? "text-emerald-400 dark:text-emerald-600 scale-110" 
+            : "text-slate-400 dark:text-slate-500 hover:text-white dark:hover:text-slate-900"
         )
       }
     >
-      <div className="relative">
-        {icon}
-        <span className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-500 rounded-full opacity-0 group-[.active]:opacity-100 transition-opacity shadow-sm" />
-      </div>
-      <span className="text-[10px] font-semibold uppercase tracking-[0.05em] transition-colors duration-500">{label}</span>
+      {icon}
+      <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-emerald-400 rounded-full opacity-0 group-[.active]:opacity-100 transition-opacity" />
     </NavLink>
   );
 }

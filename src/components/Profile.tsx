@@ -6,10 +6,11 @@ import {
   Settings, History, LogOut, Heart, ShoppingBag, 
   ChevronRight, User as UserIcon, ShieldCheck,
   ArrowLeft, Save, Lock, Phone, UserCircle,
-  CreditCard, Calendar, CheckCircle2, Clock, XCircle
+  CreditCard, Calendar, CheckCircle2, Clock, XCircle, Info
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { doc, getDoc, updateDoc, collection, query, where, getDocs, orderBy, Timestamp, FirestoreError } from 'firebase/firestore';
+import { cn } from '../lib/utils';
 
 interface UserProfile {
   name: string;
@@ -25,6 +26,47 @@ interface Order {
   createdAt: Timestamp;
   items: any[];
   pharmacyId: string;
+}
+
+function StatsBadge({ icon, value, label, color }: { icon: React.ReactNode, value: string, label: string, color: 'emerald' | 'slate' }) {
+  return (
+    <motion.div 
+      whileHover={{ y: -4, scale: 1.02 }}
+      className="p-6 bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200/50 dark:border-white/5 shadow-sm text-center space-y-3"
+    >
+      <div className={cn(
+        "w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-2",
+        color === 'emerald' ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600" : "bg-slate-50 dark:bg-white/5 text-slate-400"
+      )}>
+        {icon}
+      </div>
+      <div>
+        <p className="text-3xl font-black text-slate-900 dark:text-white font-display leading-none">{value}</p>
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">{label}</p>
+      </div>
+    </motion.div>
+  );
+}
+
+function ProfileButton({ icon, label, desc, onClick, as: Component = 'button', ...props }: any) {
+  return (
+    <Component 
+      onClick={onClick}
+      className="w-full p-5 bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-white/10 rounded-[1.75rem] text-left flex items-center justify-between group hover:shadow-xl hover:shadow-slate-200/20 dark:hover:shadow-none hover:border-emerald-500/30 transition-all active:scale-[0.98] transition-all duration-300"
+      {...props}
+    >
+      <div className="flex items-center gap-5">
+        <div className="w-12 h-12 bg-slate-50 dark:bg-white/5 rounded-2xl flex items-center justify-center group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/10 group-hover:text-emerald-600 transition-colors duration-300">
+          {React.cloneElement(icon as React.ReactElement, { className: "w-6 h-6" })}
+        </div>
+        <div>
+          <p className="text-base font-bold text-slate-900 dark:text-white leading-tight">{label}</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-0.5">{desc}</p>
+        </div>
+      </div>
+      <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-emerald-600 transition-all duration-300 group-hover:translate-x-1" />
+    </Component>
+  );
 }
 
 export default function Profile({ user }: { user: User }) {
@@ -298,143 +340,100 @@ export default function Profile({ user }: { user: User }) {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 20 }}
-          className="p-6 space-y-10 font-sans min-h-screen transition-colors duration-500"
+          className="max-w-4xl mx-auto space-y-12 font-sans transition-colors duration-500"
         >
           {/* Profile Header */}
-          <div className="flex flex-col items-center space-y-5">
+          <div className="flex flex-col items-center space-y-6 pt-8">
             <div className="relative group">
-              <div className="w-28 h-28 bg-emerald-100 dark:bg-emerald-900/30 rounded-[2.5rem] flex items-center justify-center overflow-hidden border-4 border-white dark:border-slate-800 shadow-figma-lg group-hover:scale-105 transition-transform duration-500">
+              <div className="w-32 h-32 bg-[#E8E2D2] dark:bg-[#2A2A2A] rounded-[3rem] flex items-center justify-center overflow-hidden border-4 border-white dark:border-white/5 shadow-2xl transition-transform duration-700 group-hover:scale-105">
                 {user.photoURL ? (
                   <img src={user.photoURL} alt={user.displayName || ''} className="w-full h-full object-cover" />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-500 to-emerald-600">
-                <span className="text-3xl font-bold text-white font-display">
-                  {user.displayName?.[0] || user.email?.[0]}
-                </span>
+                  <div className="w-full h-full flex items-center justify-center bg-slate-900 group-hover:bg-slate-800 transition-colors">
+                    <span className="text-4xl font-bold text-white font-display">
+                      {user.displayName?.[0] || user.email?.[0]}
+                    </span>
                   </div>
                 )}
               </div>
-              <div className="absolute -bottom-1 -right-1 w-10 h-10 bg-white dark:bg-slate-800 rounded-2xl shadow-figma flex items-center justify-center border border-slate-100 dark:border-white/10">
-                <UserIcon className="w-5 h-5 text-emerald-600" />
+              <div className="absolute -bottom-1 -right-1 w-12 h-12 bg-emerald-600 rounded-[1.25rem] shadow-xl flex items-center justify-center border-4 border-[#FAF9F6] dark:border-[#121212]">
+                <ShieldCheck className="w-5 h-5 text-white" />
               </div>
             </div>
             
             <div className="text-center space-y-2">
-              <h2 className="text-3xl font-bold text-slate-900 dark:text-white font-display tracking-tight">
-                {profile?.name || user.displayName || 'Utilisateur'}
+              <h2 className="text-4xl font-bold text-slate-900 dark:text-white font-display tracking-tight">
+                {profile?.name || user.displayName || 'Citoyen Bukavu'}
               </h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400 font-medium tracking-wide">{user.email}</p>
+              <div className="flex items-center justify-center gap-3">
+                <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{user.email}</span>
+                <span className="w-1 h-1 bg-slate-200 dark:bg-white/10 rounded-full" />
+                <span className="text-xs font-bold text-emerald-600 dark:text-emerald-500 uppercase tracking-widest">Membre Vérifié</span>
+              </div>
             </div>
           </div>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-            <motion.div 
-              whileHover={{ y: -2 }}
-              className="p-5 bg-white dark:bg-slate-900 rounded-[1.5rem] border border-slate-200/60 dark:border-white/10 shadow-sm text-center space-y-3 group hover:shadow-md transition-all"
-            >
-              <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-500/10 rounded-[1rem] flex items-center justify-center mx-auto mb-1">
-                <ShoppingBag className="w-5 h-5 text-emerald-600" />
+          {/* New Stats Board */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            <StatsBadge icon={<ShoppingBag className="w-5 h-5" />} value={orders.length.toString()} label="Commandes" color="emerald" />
+            <StatsBadge icon={<Heart className="w-5 h-5" />} value="4" label="Favoris" color="slate" />
+            <StatsBadge icon={<Clock className="w-5 h-5" />} value="24/7" label="Support" color="slate" />
+            <StatsBadge icon={<CreditCard className="w-5 h-5" />} value="Wallet" label="Paiement" color="slate" />
+          </div>
+
+          {/* Menu Sections */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] ml-2">Mon Compte</h3>
+              <div className="space-y-3">
+                <ProfileButton 
+                  onClick={() => setView('settings')}
+                  icon={<Settings className="w-5 h-5" />}
+                  label="Paramètres de sécurité"
+                  desc="Gérer votre profil et mot de passe"
+                />
+                <ProfileButton 
+                  onClick={() => setView('history')}
+                  icon={<History className="w-5 h-5" />}
+                  label="Historique d'achats"
+                  desc="Consulter vos anciennes commandes"
+                />
               </div>
-              <p className="text-3xl font-black text-slate-900 dark:text-white font-display">{orders.length}</p>
-              <p className="text-xs text-slate-500 font-medium tracking-wide">Commandes</p>
-            </motion.div>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] ml-2">Aide & Contact</h3>
+              <div className="space-y-3">
+                <ProfileButton 
+                  as="a"
+                  href="https://wa.me/243979307569"
+                  icon={<Phone className="w-5 h-5" />}
+                  label="Assistance Prioritaire"
+                  desc="Contacter un pharmacien conseil"
+                />
+                <ProfileButton 
+                  as="a"
+                  href="#"
+                  icon={<Info className="w-5 h-5" />}
+                  label="À propos du réseau"
+                  desc="Certifications et engagement qualité"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-8 flex flex-col items-center gap-6">
+            <button 
+              onClick={() => setShowLogoutConfirm(true)}
+              className="flex items-center gap-3 px-8 py-4 text-rose-500 font-bold hover:bg-rose-50 dark:hover:bg-rose-500/5 rounded-2xl transition-all active:scale-95"
+            >
+              <LogOut className="w-5 h-5" />
+              Se déconnecter de la session
+            </button>
             
-            <motion.div 
-              whileHover={{ y: -2 }}
-              className="p-5 bg-white dark:bg-slate-900 rounded-[1.5rem] border border-slate-200/60 dark:border-white/10 shadow-sm text-center space-y-3 group hover:shadow-md transition-all"
-            >
-              <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-[1rem] flex items-center justify-center mx-auto mb-1">
-                <Heart className="w-5 h-5 text-slate-600 dark:text-slate-400" />
-              </div>
-              <p className="text-3xl font-black text-slate-900 dark:text-white font-display">4</p>
-              <p className="text-xs text-slate-500 font-medium tracking-wide">Favoris</p>
-            </motion.div>
-
-            <motion.div 
-              whileHover={{ y: -2 }}
-              className="p-5 bg-white dark:bg-slate-900 rounded-[1.5rem] border border-slate-200/60 dark:border-white/10 shadow-sm text-center space-y-3 group hover:shadow-md transition-all"
-            >
-              <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-[1rem] flex items-center justify-center mx-auto mb-1">
-                <ShieldCheck className="w-5 h-5 text-slate-600 dark:text-slate-400" />
-              </div>
-              <p className="text-3xl font-black text-slate-900 dark:text-white font-display">1</p>
-              <p className="text-xs text-slate-500 font-medium tracking-wide">Comptes</p>
-            </motion.div>
-
-            <motion.div 
-              whileHover={{ y: -2 }}
-              className="p-5 bg-white dark:bg-slate-900 rounded-[1.5rem] border border-slate-200/60 dark:border-white/10 shadow-sm text-center space-y-3 group hover:shadow-md transition-all"
-            >
-              <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-[1rem] flex items-center justify-center mx-auto mb-1">
-                <Clock className="w-5 h-5 text-slate-600 dark:text-slate-400" />
-              </div>
-              <p className="text-3xl font-black text-slate-900 dark:text-white font-display">24h</p>
-              <p className="text-xs text-slate-500 font-medium tracking-wide">Support</p>
-            </motion.div>
-          </div>
-
-          {/* Menu Options */}
-          <div className="space-y-4 max-w-2xl mx-auto w-full">
-            <h3 className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Paramètres</h3>
-            
-            <div className="flex flex-col gap-3">
-              <button 
-                onClick={() => setView('settings')}
-                className="w-full p-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-white/10 rounded-[1.5rem] text-slate-700 dark:text-slate-200 hover:shadow-md transition-all text-left flex items-center justify-between shadow-sm group active:scale-[0.98]"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-[1rem] flex items-center justify-center group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/10 transition-colors">
-                    <Settings className="w-5 h-5 text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-500" />
-                  </div>
-                  <span className="text-base font-medium">Paramètres du compte</span>
-                </div>
-                <ChevronRight className="w-5 h-5 text-slate-300 dark:text-slate-600 group-hover:text-emerald-600 dark:group-hover:text-emerald-500 transition-colors" />
-              </button>
-
-              <button 
-                onClick={() => setView('history')}
-                className="w-full p-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-white/10 rounded-[1.5rem] text-slate-700 dark:text-slate-200 hover:shadow-md transition-all text-left flex items-center justify-between shadow-sm group active:scale-[0.98]"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-[1rem] flex items-center justify-center group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/10 transition-colors">
-                    <History className="w-5 h-5 text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-500" />
-                  </div>
-                  <span className="text-base font-medium">Historique des paiements</span>
-                </div>
-                <ChevronRight className="w-5 h-5 text-slate-300 dark:text-slate-600 group-hover:text-emerald-600 dark:group-hover:text-emerald-500 transition-colors" />
-              </button>
-
-              <a 
-                href="https://wa.me/243979307569" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-full p-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-white/10 rounded-[1.5rem] text-slate-700 dark:text-slate-200 hover:shadow-md transition-all text-left flex items-center justify-between shadow-sm group active:scale-[0.98]"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-[1rem] flex items-center justify-center group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/10 transition-colors">
-                    <Phone className="w-5 h-5 text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-500" />
-                  </div>
-                  <span className="text-base font-medium">Support Client (WhatsApp)</span>
-                </div>
-                <ChevronRight className="w-5 h-5 text-slate-300 dark:text-slate-600 group-hover:text-emerald-600 dark:group-hover:text-emerald-500 transition-colors" />
-              </a>
-            </div>
-
-            <div className="pt-6">
-              <button 
-                onClick={() => setShowLogoutConfirm(true)}
-                className="w-full p-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-white/10 text-rose-600 dark:text-rose-400 rounded-[1.5rem] font-medium hover:shadow-md transition-all text-center flex items-center justify-center gap-3 active:scale-[0.98] shadow-sm"
-              >
-                <LogOut className="w-4 h-4" />
-                <span className="text-base">Se déconnecter</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Version Info */}
-          <div className="text-center pt-4">
-            <p className="text-[10px] text-slate-300 dark:text-slate-700 font-bold uppercase tracking-widest">PharmaBukavu v1.0.4</p>
+            <p className="text-[10px] text-slate-300 dark:text-slate-700 font-bold uppercase tracking-[0.3em]">
+              Bukavu Health Network • v1.0.4
+            </p>
           </div>
         </motion.div>
       )}

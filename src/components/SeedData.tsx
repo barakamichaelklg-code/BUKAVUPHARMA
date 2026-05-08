@@ -53,7 +53,7 @@ export default function SeedData() {
           molecule: "Artemether + Lumefantrine", 
           standardPrice: 12000, 
           category: "Paludisme", 
-          description: "Traitement curatif du paludisme à Plasmodium falciparum.", 
+          description: "Le traitement de référence pour le paludisme simple à Bukavu. Médicament certifié par l'OMS pour une action rapide contre les parasites.", 
           imageUrl: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800" 
         },
         { 
@@ -61,7 +61,7 @@ export default function SeedData() {
           molecule: "Paracétamol", 
           standardPrice: 2500, 
           category: "Douleur", 
-          description: "Antalgique et antipyrétique pour douleurs légères à modérées.", 
+          description: "Soulage efficacement la fièvre et les douleurs légères. Indispensable dans chaque pharmacie familiale.", 
           imageUrl: "https://images.unsplash.com/photo-1550572017-4f3b204003c2?auto=format&fit=crop&q=80&w=800" 
         },
         { 
@@ -69,31 +69,31 @@ export default function SeedData() {
           molecule: "Amoxicilline", 
           standardPrice: 8500, 
           category: "Antibio", 
-          description: "Antibiotique de la famille des bétalactamines.", 
+          description: "Antibiotique à large spectre utilisé pour traiter diverses infections bactériennes respiratoires et cutanées.", 
           imageUrl: "https://images.unsplash.com/photo-1471864190281-ad5f9f81ce4c?auto=format&fit=crop&q=80&w=800" 
         },
         { 
-          name: "Insuline Humaine", 
-          molecule: "Insuline", 
-          standardPrice: 45000, 
+          name: "Insuline NovoRapid", 
+          molecule: "Insuline Aspart", 
+          standardPrice: 48000, 
           category: "Diabète", 
-          description: "Hormone pour le contrôle de la glycémie.", 
-          imageUrl: "https://images.unsplash.com/photo-1628348070830-289f0923171b?auto=format&fit=crop&q=80&w=800" 
+          description: "Analogue de l'insuline à action rapide pour le contrôle glycémique des patients diabétiques.", 
+          imageUrl: "https://images.unsplash.com/photo-1583946099379-f9c9cb8bc030?auto=format&fit=crop&q=80&w=800" 
         },
         { 
           name: "Ibuprofène 400mg", 
           molecule: "Ibuprofène", 
           standardPrice: 3500, 
           category: "Douleur", 
-          description: "Anti-inflammatoire non stéroïdien (AINS).", 
-          imageUrl: "https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?auto=format&fit=crop&q=80&w=800" 
+          description: "Anti-inflammatoire efficace contre les douleurs articulaires, dentaires et les maux de tête intenses.", 
+          imageUrl: "https://images.unsplash.com/photo-1547489432-cf93fa6c71ee?auto=format&fit=crop&q=80&w=800" 
         },
         { 
           name: "Ciprofloxacine 500mg", 
           molecule: "Ciprofloxacine", 
           standardPrice: 15000, 
           category: "Antibio", 
-          description: "Antibiotique de la famille des fluoroquinolones.", 
+          description: "Fluoroquinolone puissante indiquée pour les infections urinaires et gastro-intestinales sévères.", 
           imageUrl: "https://images.unsplash.com/photo-1587854692152-cbe660dbbb88?auto=format&fit=crop&q=80&w=800" 
         },
         { 
@@ -101,7 +101,7 @@ export default function SeedData() {
           molecule: "Metformine", 
           standardPrice: 12000, 
           category: "Diabète", 
-          description: "Antidiabétique oral de la famille des biguanides.", 
+          description: "Le pilier du traitement du diabète de type 2 pour améliorer la sensibilité à l'insuline.", 
           imageUrl: "https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?auto=format&fit=crop&q=80&w=800" 
         },
         { 
@@ -109,31 +109,31 @@ export default function SeedData() {
           molecule: "Quinine", 
           standardPrice: 5000, 
           category: "Paludisme", 
-          description: "Traitement du paludisme grave ou résistant.", 
-          imageUrl: "https://images.unsplash.com/photo-1585435557343-3b092031a831?auto=format&fit=crop&q=80&w=800" 
+          description: "Utilisé pour le traitement du paludisme sévère en deuxième intention.", 
+          imageUrl: "https://images.unsplash.com/photo-1583321500900-82807e458f3c?auto=format&fit=crop&q=80&w=800" 
         },
         { 
           name: "Azithromycine 500mg", 
           molecule: "Azithromycine", 
-          standardPrice: 18000, 
+          standardPrice: 22000, 
           category: "Antibio", 
-          description: "Antibiotique macrolide pour diverses infections.", 
-          imageUrl: "https://images.unsplash.com/photo-1583947581924-860bda6a5a0e?auto=format&fit=crop&q=80&w=800" 
+          description: "Traitement court de 3 jours pour les infections respiratoires et les angines.", 
+          imageUrl: "https://images.unsplash.com/photo-1628771065518-0d82f1938462?auto=format&fit=crop&q=80&w=800" 
         },
         { 
           name: "Diclofénac 50mg", 
           molecule: "Diclofénac", 
           standardPrice: 4000, 
           category: "Douleur", 
-          description: "Anti-inflammatoire pour douleurs articulaires.", 
-          imageUrl: "https://images.unsplash.com/photo-1628771065518-0d82f1938462?auto=format&fit=crop&q=80&w=800" 
+          description: "Gel ou comprimé pour le soulagement rapide des inflammations rhumatismales.", 
+          imageUrl: "https://images.unsplash.com/photo-1585435557343-3b092031a831?auto=format&fit=crop&q=80&w=800" 
         },
         { 
           name: "Glibenclamide 5mg", 
           molecule: "Glibenclamide", 
           standardPrice: 6000, 
           category: "Diabète", 
-          description: "Sulfonylurée pour le diabète de type 2.", 
+          description: "Stimule la production d'insuline par le pancréas pour stabiliser la glycémie.", 
           imageUrl: "https://images.unsplash.com/photo-1584362917165-526a968579e8?auto=format&fit=crop&q=80&w=800" 
         },
         { 
@@ -141,7 +141,7 @@ export default function SeedData() {
           molecule: "Artesunate", 
           standardPrice: 25000, 
           category: "Paludisme", 
-          description: "Traitement d'urgence du paludisme sévère.", 
+          description: "Seringues et ampoules pour le traitement d'urgence du paludisme cérébral.", 
           imageUrl: "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?auto=format&fit=crop&q=80&w=800" 
         }
       ];

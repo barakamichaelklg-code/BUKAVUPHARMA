@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { ShoppingBag, ArrowLeft, ShieldCheck, Info, CreditCard, Truck, CheckCircle2, ShoppingCart } from 'lucide-react';
+import { ShoppingBag, ArrowLeft, ShieldCheck, Info, CreditCard, Truck, CheckCircle2, ShoppingCart, Pill, MapPin } from 'lucide-react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc, collection, query, where, onSnapshot, addDoc, deleteDoc, FirestoreError } from 'firebase/firestore';
 import { db, auth, handleFirestoreError, OperationType } from '../firebase';
 import { Medication, Stock, Pharmacy } from '../types';
 import { serverTimestamp } from 'firebase/firestore';
 import { Trash2 } from 'lucide-react';
+import { cn } from '../lib/utils';
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -141,98 +142,122 @@ export default function ProductDetails() {
       </div>
 
       {/* Product Info */}
-      <div className="p-6 space-y-8 pb-40 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-start">
-          <div className="w-full aspect-square bg-[#EFECE5] dark:bg-[#201F1E] rounded-[2rem] flex items-center justify-center shadow-sm relative overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-100/50 dark:from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="p-4 md:p-8 space-y-12 pb-40 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 items-start">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="w-full aspect-[4/5] bg-white dark:bg-slate-900 rounded-[2.5rem] flex items-center justify-center shadow-lg shadow-slate-200/50 dark:shadow-none relative overflow-hidden group border border-slate-200/60 dark:border-white/5"
+          >
             {med.imageUrl && med.imageUrl !== '❓' ? (
               <img 
                 src={med.imageUrl} 
                 alt={med.name} 
-                className="w-full h-full object-cover relative z-10"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 referrerPolicy="no-referrer"
-                onError={(e) => {
-                  e.currentTarget.src = "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800";
-                }}
               />
             ) : (
-              <img 
-                src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800" 
-                alt={med.name} 
-                className="w-full h-full object-cover relative z-10 opacity-80"
-                referrerPolicy="no-referrer"
-              />
+              <div className="flex flex-col items-center gap-4 text-slate-300 dark:text-slate-800">
+                <Pill className="w-24 h-24" />
+                <span className="font-bold uppercase tracking-widest text-xs">Image non disponible</span>
+              </div>
             )}
-          </div>
+            <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-900/10 to-transparent pointer-events-none" />
+          </motion.div>
 
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/30 px-3 py-1 rounded-[1rem] uppercase tracking-widest border border-emerald-100 dark:border-emerald-500/20 shadow-sm">
+          <div className="space-y-10 py-4">
+            <div className="space-y-6">
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-4 py-1.5 rounded-full uppercase tracking-widest border border-emerald-100 dark:border-emerald-500/20">
                   {med.category}
                 </span>
-                <span className="text-2xl font-black text-slate-900 dark:text-white font-display">{med.standardPrice.toLocaleString()} FC</span>
+                <div className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-700" />
+                <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{med.molecule}</span>
               </div>
+              
               <div className="space-y-2">
-                <h1 className="text-4xl font-bold text-slate-900 dark:text-white font-display leading-[1.1] tracking-tight">{med.name}</h1>
-                <p className="text-xs text-slate-500 font-semibold uppercase tracking-[0.2em]">{med.molecule}</p>
+                <h1 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-white font-display leading-tight tracking-tight">{med.name}</h1>
+                <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-500 font-display">{med.standardPrice.toLocaleString()} <span className="text-lg font-bold text-slate-400">FC</span></p>
               </div>
             </div>
 
-            <div className="space-y-3">
-              <h3 className="font-bold text-slate-900 dark:text-white flex items-center gap-2 text-lg font-display">
-                <div className="w-8 h-8 bg-slate-50 dark:bg-slate-800 rounded-[0.6rem] flex items-center justify-center border border-slate-200/60 dark:border-white/5 shadow-sm">
-                  <Info className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                </div>
-                Description
+            <div className="space-y-4">
+              <h3 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest flex items-center gap-3">
+                Description du produit
+                <div className="flex-1 h-px bg-slate-100 dark:bg-white/5" />
               </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
-                {med.description || "Aucune description disponible pour ce médicament. Veuillez consulter un pharmacien certifié pour plus d'informations."}
+              <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-serif italic">
+                "{med.description || "Indication thérapeutique à confirmer auprès d'un spécialiste."}"
               </p>
+              <div className="grid grid-cols-2 gap-4 pt-4">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5 flex items-center gap-3 font-medium text-sm">
+                  <ShieldCheck className="w-5 h-5 text-emerald-600" />
+                  Qualité certifiée
+                </div>
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5 flex items-center gap-3 font-medium text-sm">
+                  <Info className="w-5 h-5 text-emerald-600" />
+                  Guide d'utilisation
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Availability */}
-        <section className="space-y-5">
-          <h3 className="text-xl font-bold text-slate-900 dark:text-white font-display tracking-tight">Disponibilité à Bukavu</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <section className="space-y-8">
+          <div className="flex items-center gap-4">
+            <h3 className="text-2xl font-bold text-slate-900 dark:text-white font-display">Points de vente à Bukavu</h3>
+            <div className="flex-1 h-px bg-slate-100 dark:bg-white/5" />
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {stocks.length > 0 ? (
               stocks.map((s) => (
-                <div key={s.id} className="p-5 rounded-[1.5rem] border border-slate-200/60 dark:border-white/10 bg-white dark:bg-slate-900 shadow-sm text-slate-900 dark:text-white flex items-center justify-between hover:shadow-md transition-all">
-                  <div className="space-y-1.5 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <Link to={`/pharmacy/${s.pharmacyId}`} className="font-semibold text-slate-900 dark:text-white text-base truncate tracking-tight hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-                        {s.pharmacy.name}
-                      </Link>
-                      {s.pharmacy.status === 'certified' && <ShieldCheck className="w-4 h-4 text-emerald-600 fill-emerald-50 dark:fill-emerald-500/10 flex-shrink-0" />}
-                    </div>
-                    <div className="flex flex-col gap-0.5">
-                      <p className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-semibold tracking-widest truncate">{s.pharmacy.neighborhood}</p>
-                      <p className="text-[10px] text-emerald-700 dark:text-emerald-500 font-semibold tracking-widest font-mono">Tél: {s.pharmacy.phone}</p>
+                <div key={s.id} className="group card-premium p-6 flex items-center justify-between hover:border-emerald-500/30">
+                  <div className="space-y-3 min-w-0">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-[#EFECE5] dark:bg-emerald-950/30 rounded-2xl flex items-center justify-center flex-shrink-0">
+                        <MapPin className="w-6 h-6 text-emerald-600 dark:text-emerald-500" />
+                      </div>
+                      <div className="min-w-0">
+                        <Link to={`/pharmacy/${s.pharmacyId}`} className="font-bold text-slate-900 dark:text-white text-xl font-display hover:text-emerald-600 dark:hover:text-emerald-400 truncate">
+                          {s.pharmacy.name}
+                        </Link>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">{s.pharmacy.neighborhood}</p>
+                      </div>
                     </div>
                   </div>
-                  <div className="text-right space-y-2 flex-shrink-0 ml-4">
-                    <p className="font-bold text-slate-900 dark:text-white font-display text-lg">{s.price.toLocaleString()} FC</p>
+                  
+                  <div className="text-right flex flex-col items-end gap-3">
+                    <span className="font-bold text-slate-900 dark:text-white text-2xl font-display">{s.price.toLocaleString()} FC</span>
                     <button 
                       onClick={() => handlePurchase(s)}
                       disabled={buying || success}
-                      className="text-[10px] bg-slate-900 dark:bg-emerald-600 text-white px-4 py-2 rounded-[1rem] font-semibold uppercase tracking-widest disabled:opacity-50 shadow-sm active:scale-95 transition-all flex items-center gap-1.5"
+                      className={cn(
+                        "button-premium !py-2.5 !px-5 !rounded-xl !text-xs !shadow-none",
+                        success && "!bg-slate-900 dark:!bg-white !text-white dark:!text-slate-900"
+                      )}
                     >
                       {success ? (
-                        <><CheckCircle2 className="w-3.5 h-3.5" /> Ajouté</>
+                        <><CheckCircle2 className="w-4 h-4" /> Ajouté</>
                       ) : buying ? (
                         "..."
                       ) : (
-                        <><ShoppingCart className="w-3.5 h-3.5" /> Ajouter au panier</>
+                        <><ShoppingCart className="w-4 h-4" /> Commander</>
                       )}
                     </button>
                   </div>
                 </div>
               ))
             ) : (
-              <div className="col-span-full p-8 rounded-[1.5rem] border border-dashed border-slate-200/80 dark:border-white/10 text-center text-slate-400 dark:text-slate-500 text-sm italic bg-slate-50/50 dark:bg-[#1A1A1A]">
-                Actuellement en rupture de stock dans les pharmacies partenaires.
+              <div className="col-span-full py-20 text-center space-y-4 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-[2.5rem]">
+                <div className="w-16 h-16 bg-slate-50 dark:bg-slate-900 rounded-full flex items-center justify-center mx-auto">
+                  <Info className="w-6 h-6 text-slate-300 dark:text-slate-700" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-slate-900 dark:text-white font-bold text-lg font-display">Momentanément indisponible</p>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Revenez plus tard ou consultez d'autres produits similaires.</p>
+                </div>
               </div>
             )}
           </div>
