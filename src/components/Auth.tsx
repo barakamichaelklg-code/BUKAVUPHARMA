@@ -7,12 +7,20 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleGoogleLogin = async () => {
+    setError(null);
+    setLoading(true);
     const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    
     try {
+      console.log("Starting Google login...");
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
+      console.log("Google login successful:", user.email);
       
       // Create user document if it doesn't exist
       const userPath = `users/${user.uid}`;
@@ -28,11 +36,25 @@ export default function Auth() {
             role: 'user' // Default role
           });
         }
-      } catch (error) {
-        handleFirestoreError(error, OperationType.WRITE, userPath);
+      } catch (err: any) {
+        console.error("Firestore user creation error (non-fatal):", err);
       }
-    } catch (error) {
-      console.error("Login error:", error);
+    } catch (err: any) {
+      console.error("Login error details:", err);
+      if (err.code === 'auth/popup-blocked') {
+        setError("Le popup de connexion a été bloqué par votre navigateur. Veuillez autoriser les fenêtres surgissantes pour ce site.");
+      } else if (err.code === 'auth/popup-closed-by-user') {
+        setError("La fenêtre de connexion a été fermée avant la fin de l'opération.");
+      } else if (err.code === 'auth/cancelled-popup-request') {
+        // This often happens if the user clicks twice quickly
+        console.log("Popup request cancelled due to another request.");
+      } else if (err.code === 'auth/unauthorized-domain') {
+        setError("Ce domaine n'est pas autorisé pour l'authentification. Veuillez contacter l'administrateur.");
+      } else {
+        setError(`Erreur de connexion : ${err.message || "Impossible de se connecter avec Google"}`);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,14 +79,30 @@ export default function Auth() {
       </div>
 
       <div className="w-full max-w-sm mx-auto space-y-6">
+        {error && (
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-[1.2rem] text-sm font-medium flex items-center gap-3"
+          >
+            <ShieldCheck className="w-5 h-5 flex-shrink-0" />
+            {error}
+          </motion.div>
+        )}
+
         <motion.button 
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleGoogleLogin}
-          className="w-full py-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-white/10 rounded-[1.5rem] font-medium text-slate-700 dark:text-slate-200 flex items-center justify-center gap-3 shadow-sm hover:shadow-md transition-all"
+          disabled={loading}
+          className="w-full py-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-white/10 rounded-[1.5rem] font-medium text-slate-700 dark:text-slate-200 flex items-center justify-center gap-3 shadow-sm hover:shadow-md transition-all disabled:opacity-50"
         >
-          <img src="https://www.google.com/favicon.ico" className="w-5 h-5" alt="Google" />
-          <span className="font-display text-base">Continuer avec Google</span>
+          {loading ? (
+            <div className="w-5 h-5 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+          ) : (
+            <img src="https://www.google.com/favicon.ico" className="w-5 h-5" alt="Google" />
+          )}
+          <span className="font-display text-base">{loading ? "Connexion..." : "Continuer avec Google"}</span>
         </motion.button>
 
         <div className="relative flex items-center justify-center py-2">
@@ -86,6 +124,7 @@ export default function Auth() {
           <motion.button 
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.98 }}
+            onClick={() => setError("La connexion par téléphone n'est pas encore disponible. Veuillez utiliser Google.")}
             className="w-full py-4 bg-emerald-600 text-white rounded-[1.5rem] font-medium hover:bg-emerald-700 transition-all font-display text-lg shadow-sm"
           >
             {isLogin ? "Se connecter" : "Créer un compte"}

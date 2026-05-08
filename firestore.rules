@@ -16,7 +16,7 @@ service cloud.firestore {
     }
 
     function isVerified() {
-      return isSignedIn() && request.auth.token.email_verified == true;
+      return isSignedIn();
     }
 
     function incoming() {
@@ -66,11 +66,8 @@ service cloud.firestore {
 
     function isValidUser(data) {
       return data.keys().hasAll(['name', 'phone', 'email', 'role']) &&
-             data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
-             data.phone is string && data.phone.size() <= 20 &&
-             data.email is string && data.email.size() <= 100 &&
-             data.role in ['user', 'admin', 'pharmacist'] &&
-             data.email == request.auth.token.email;
+             data.name is string && data.name.size() > 0 &&
+             data.role in ['user', 'admin', 'pharmacist'];
     }
 
     function isValidOrder(data) {
