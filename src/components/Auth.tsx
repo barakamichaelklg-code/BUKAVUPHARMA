@@ -49,7 +49,8 @@ export default function Auth() {
         // This often happens if the user clicks twice quickly
         console.log("Popup request cancelled due to another request.");
       } else if (err.code === 'auth/unauthorized-domain') {
-        setError("Ce domaine n'est pas autorisé pour l'authentification. Veuillez contacter l'administrateur.");
+        const currentDomain = window.location.hostname;
+        setError(`Ce domaine (${currentDomain}) n'est pas autorisé. Veuillez l'ajouter dans la console Firebase (Authentification > Paramètres > Domaines autorisés).`);
       } else {
         setError(`Erreur de connexion : ${err.message || "Impossible de se connecter avec Google"}`);
       }
