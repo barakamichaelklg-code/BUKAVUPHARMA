@@ -83,4 +83,8 @@ export interface ChatMessage {
   senderName: string;
   text: string;
   createdAt: any;
+  medOfferId?: string;
+  medOfferName?: string;
+  medOfferPrice?: number;
+  medOfferImage?: string;
 }

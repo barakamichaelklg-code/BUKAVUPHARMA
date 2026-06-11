@@ -142,6 +142,7 @@ service cloud.firestore {
           (incoming().status == 'paid' && existing().status == 'pending' && incoming().diff(existing()).affectedKeys().hasOnly(['status']))
         )
       );
+      allow delete: if isOwner(existing().userId) || isAdmin();
     }
 
     match /reviews/{reviewId} {

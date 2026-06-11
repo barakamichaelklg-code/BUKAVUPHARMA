@@ -10,6 +10,25 @@ import { cn } from '../lib/utils';
 import { Trash2, Plus, X } from 'lucide-react';
 import { AnimatePresence } from 'motion/react';
 
+export function getMedicationImage(imageUrl?: string, category?: string): string {
+  if (imageUrl && imageUrl !== '❓' && imageUrl.trim().startsWith('http')) {
+    return imageUrl;
+  }
+  
+  const fallbacks: Record<string, string> = {
+    'Paludisme': "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800",
+    'Douleur': "https://images.unsplash.com/photo-1550572017-4f3b204003c2?auto=format&fit=crop&q=80&w=800",
+    'Antibio': "https://images.unsplash.com/photo-1471864190281-ad5f9f81ce4c?auto=format&fit=crop&q=80&w=800",
+    'Antibiotiques': "https://images.unsplash.com/photo-1471864190281-ad5f9f81ce4c?auto=format&fit=crop&q=80&w=800",
+    'Diabète': "https://images.unsplash.com/photo-1583946099379-f9c9cb8bc030?auto=format&fit=crop&q=80&w=800",
+    'Vitamines': "https://images.unsplash.com/photo-1616679911721-eff6eec18fcd?auto=format&fit=crop&q=80&w=800",
+    'Pédiatrie': "https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?auto=format&fit=crop&q=80&w=800",
+  };
+  
+  const cat = category || 'default';
+  return fallbacks[cat] || "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800";
+}
+
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -217,18 +236,12 @@ export default function Dashboard() {
               >
                 <Link to={`/product/${med.id}`} className="flex flex-col h-full">
                   <div className="relative aspect-[4/5] bg-slate-50 dark:bg-slate-900 overflow-hidden border-b border-slate-100 dark:border-white/5">
-                    {med.imageUrl && med.imageUrl !== '❓' ? (
-                      <img 
-                        src={med.imageUrl} 
-                        alt={med.name} 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        referrerPolicy="no-referrer"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-900">
-                        <Pill className="w-12 h-12 text-slate-300 dark:text-slate-800" />
-                      </div>
-                    )}
+                    <img 
+                      src={getMedicationImage(med.imageUrl, med.category)} 
+                      alt={med.name} 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      referrerPolicy="no-referrer"
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     
                     {isAdmin && (

@@ -8,6 +8,7 @@ import { Medication, Stock, Pharmacy } from '../types';
 import { serverTimestamp } from 'firebase/firestore';
 import { Trash2 } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { getMedicationImage } from './Dashboard';
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -149,19 +150,12 @@ export default function ProductDetails() {
             animate={{ opacity: 1, scale: 1 }}
             className="w-full aspect-[4/5] bg-white dark:bg-slate-900 rounded-[2.5rem] flex items-center justify-center shadow-lg shadow-slate-200/50 dark:shadow-none relative overflow-hidden group border border-slate-200/60 dark:border-white/5"
           >
-            {med.imageUrl && med.imageUrl !== '❓' ? (
-              <img 
-                src={med.imageUrl} 
-                alt={med.name} 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                referrerPolicy="no-referrer"
-              />
-            ) : (
-              <div className="flex flex-col items-center gap-4 text-slate-300 dark:text-slate-800">
-                <Pill className="w-24 h-24" />
-                <span className="font-bold uppercase tracking-widest text-xs">Image non disponible</span>
-              </div>
-            )}
+            <img 
+              src={getMedicationImage(med.imageUrl, med.category)} 
+              alt={med.name} 
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              referrerPolicy="no-referrer"
+            />
             <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-900/10 to-transparent pointer-events-none" />
           </motion.div>
 
